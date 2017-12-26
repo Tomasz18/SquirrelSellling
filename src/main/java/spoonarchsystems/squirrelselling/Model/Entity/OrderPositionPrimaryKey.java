@@ -16,7 +16,8 @@ public class OrderPositionPrimaryKey implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.order.getNumber().equals(((OrderPositionPrimaryKey)obj).order.getNumber());
+        return this.order.getNumber().equals(((OrderPositionPrimaryKey)obj).order.getNumber())
+                && this.ware.getId() == ((OrderPositionPrimaryKey) obj).ware.getId();
     }
 
     @Override

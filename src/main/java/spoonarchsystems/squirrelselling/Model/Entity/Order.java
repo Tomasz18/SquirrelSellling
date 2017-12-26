@@ -4,6 +4,7 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "zamowienia")
@@ -22,6 +23,9 @@ public class Order {
     @JoinColumn(name = "idKlienta", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
+    @OneToMany(mappedBy = "order")
+    private Set<Complaint> complaints;
+
     @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
 
@@ -33,10 +37,10 @@ public class Order {
     private Date submissionDate;
 
     @Column(name = "czasRealizacji")
-    private int realizationTime;
+    private Integer realizationTime;
 
     @Column(name = "czasOdroczenia", nullable = false)
-    private int postponementTime;
+    private Integer postponementTime;
 
     @Column(name = "dataSprzedazy")
     @Temporal(TemporalType.DATE)
@@ -50,7 +54,7 @@ public class Order {
     private Date completionDate;
 
     @Column(name = "czasDostawy")
-    private int deliveryTime;
+    private Integer deliveryTime;
 
     @Column(name = "odbiorOsobisty", nullable = false)
     private boolean personalCollection;
@@ -110,19 +114,19 @@ public class Order {
         this.submissionDate = submissionDate;
     }
 
-    public int getRealizationTime() {
+    public Integer getRealizationTime() {
         return realizationTime;
     }
 
-    public void setRealizationTime(int realizationTime) {
+    public void setRealizationTime(Integer realizationTime) {
         this.realizationTime = realizationTime;
     }
 
-    public int getPostponementTime() {
+    public Integer getPostponementTime() {
         return postponementTime;
     }
 
-    public void setPostponementTime(int postponementTime) {
+    public void setPostponementTime(Integer postponementTime) {
         this.postponementTime = postponementTime;
     }
 
@@ -150,11 +154,11 @@ public class Order {
         this.completionDate = completionDate;
     }
 
-    public int getDeliveryTime() {
+    public Integer getDeliveryTime() {
         return deliveryTime;
     }
 
-    public void setDeliveryTime(int deliveryTime) {
+    public void setDeliveryTime(Integer deliveryTime) {
         this.deliveryTime = deliveryTime;
     }
 
@@ -180,5 +184,13 @@ public class Order {
 
     public void setCollectionDate(Date collectionDate) {
         this.collectionDate = collectionDate;
+    }
+
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
     }
 }
