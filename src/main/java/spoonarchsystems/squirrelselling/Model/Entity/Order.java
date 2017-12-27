@@ -26,6 +26,14 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private Set<Complaint> complaints;
 
+    @ManyToOne
+    @JoinColumn(name = "adresDostawy", referencedColumnName = "id")
+    private Address deliveryAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "adresNabywcy", referencedColumnName = "id")
+    private Address byuerAddress;
+
     @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
 

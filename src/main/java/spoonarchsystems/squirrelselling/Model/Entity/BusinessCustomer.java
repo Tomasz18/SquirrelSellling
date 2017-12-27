@@ -1,30 +1,32 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 // TODO: utworzyć tabelę Przedsiębiorstwa
 
 @Entity
-@Table(name = "Przedsiebiorstwa")
-public class BusinessCustomer {
+@Table(name = "przedsiebiorstwa")
+public class BusinessCustomer  implements Serializable{
 
     @Id
+    @OneToOne
     @JoinColumn(name = "idKlienta", referencedColumnName = "id")
     private Customer customer;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "char(9)")
     private String nip;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 14)
     private String regon;
 
-    @Column(name = "nazwa", nullable = false)
+    @Column(name = "nazwa", nullable = false, length = 128)
     private String name;
 
-    @Column(name = "imieWlasciciela", nullable = false)
+    @Column(name = "imieWlasciciela", nullable = false, length = 20)
     private String ownerName;
 
-    @Column(name = "nazwiskoWlasciciela", nullable = false)
+    @Column(name = "nazwiskoWlasciciela", nullable = false, length = 30)
     private String ownerSurname;
 
     public Customer getCustomer() {

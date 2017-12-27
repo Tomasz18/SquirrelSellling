@@ -3,11 +3,12 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "Klienci")
-public class Customer {
+@Table(name = "klienci")
+public class Customer implements Serializable{
 
     @Id
     @Column(name = "id")
@@ -16,6 +17,12 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     @OrderBy("dataZlozenia")
     private List<Order> orders;
+
+    @OneToOne(mappedBy = "customer")
+    private IndividualCustomer individualCustomer;
+
+    @OneToOne(mappedBy = "customer")
+    private BusinessCustomer businessCustomer;
 
     @Column(name = "numer", length = 19, unique = true, nullable = false)
     private String number;
@@ -75,5 +82,21 @@ public class Customer {
 
     public void setCustomerType(char customerType) {
         this.customerType = customerType;
+    }
+
+    public IndividualCustomer getIndividualCustomer() {
+        return individualCustomer;
+    }
+
+    public void setIndividualCustomer(IndividualCustomer individualCustomer) {
+        this.individualCustomer = individualCustomer;
+    }
+
+    public BusinessCustomer getBusinessCustomer() {
+        return businessCustomer;
+    }
+
+    public void setBusinessCustomer(BusinessCustomer businessCustomer) {
+        this.businessCustomer = businessCustomer;
     }
 }

@@ -5,26 +5,26 @@ import javax.persistence.*;
 // TODO: utowrzyć tabelę Adresy
 
 @Entity
-@Table(name = "Adresy")
+@Table(name = "adresy")
 public class Address {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "char(128)")
     private String id;
 
-    @Column(name = "miasto", nullable = false)
+    @Column(name = "miasto", nullable = false, length = 80)
     private String city;
 
-    @Column(name = "ulica")
+    @Column(name = "ulica", length = 80)
     private String street;
 
-    @Column(name = "nrBudynku", nullable = false)
+    @Column(name = "nrBudynku", nullable = false, length = 5)
     private String buildingNumber;
 
-    @Column(name = "nrLokalu")
+    @Column(name = "nrLokalu", length = 5)
     private String localNumber;
 
-    @Column(name = "kodPocztowy", nullable = false)
+    @Column(name = "kodPocztowy", nullable = false, length = 6)
     private String postalCode;
 
     public String getId() {
