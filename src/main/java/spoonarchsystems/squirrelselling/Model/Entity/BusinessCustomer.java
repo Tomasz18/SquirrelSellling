@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Przedsiebiorstwa")
 public class BusinessCustomer {
-    // POLA ------------------------------------------------------------------------------------------------------------
 
     @Id
     @JoinColumn(name = "idKlienta", referencedColumnName = "id")
@@ -28,52 +27,48 @@ public class BusinessCustomer {
     @Column(name = "nazwiskoWlasciciela", nullable = false)
     private String ownerSurname;
 
-    // GETTERY ---------------------------------------------------------------------------------------------------------
-
     public Customer getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getNip() {
         return nip;
     }
 
-    public String getRegon() {
-        return regon;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public String getOwnerSurname() {
-        return ownerSurname;
-    }
-
-    // SETTERY ---------------------------------------------------------------------------------------------------------
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public void setNip(String nip) {
         this.nip = nip;
+    }
+
+    public String getRegon() {
+        return regon;
     }
 
     public void setRegon(String regon) {
         this.regon = regon;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getOwnerName() {
+        return ownerName;
+    }
+
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getOwnerSurname() {
+        return ownerSurname;
     }
 
     public void setOwnerSurname(String ownerSurname) {

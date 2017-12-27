@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Adresy")
 public class Address {
-    // POLA ------------------------------------------------------------------------------------------------------------
 
     @Id
     @Column(name = "id")
@@ -28,52 +27,48 @@ public class Address {
     @Column(name = "kodPocztowy", nullable = false)
     private String postalCode;
 
-    // GETTERY ---------------------------------------------------------------------------------------------------------
-
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCity() {
         return city;
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public String getBuildingNumber() {
-        return buildingNumber;
-    }
-
-    public String getLocalNumber() {
-        return localNumber;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    // SETTERY ---------------------------------------------------------------------------------------------------------
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
     }
 
     public void setStreet(String street) {
         this.street = street;
     }
 
+    public String getBuildingNumber() {
+        return buildingNumber;
+    }
+
     public void setBuildingNumber(String buildingNumber) {
         this.buildingNumber = buildingNumber;
     }
 
+    public String getLocalNumber() {
+        return localNumber;
+    }
+
     public void setLocalNumber(String localNumber) {
         this.localNumber = localNumber;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
