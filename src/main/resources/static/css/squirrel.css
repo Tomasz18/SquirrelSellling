@@ -1,0 +1,16 @@
+.borderless td, .borderless th, .borderless thead th {
+    border: none;
+}
+.bordered-container {
+    border: 2px solid;
+    border-radius: 4px;
+    padding: 10px 10px 0 10px;
+}
+.bordered-container-title {
+    position: absolute;
+    left: 30px;
+    top: -0.9em;
+    background-color: white;
+    border-left: 3px solid white;
+    border-right: 3px solid white;
+}
