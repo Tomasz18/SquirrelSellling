@@ -39,6 +39,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.getPositions().clear();
     }
 
+    @Override
+    public double getSum() {
+        double sum = 0;
+        for(ShoppingCartPosition p : shoppingCart.getPositions())
+            sum += p.getPrice();
+        return sum;
+    }
+
     private boolean validateQuantity(ShoppingCart cart) {
         for(ShoppingCartPosition p : cart.getPositions()) {
             if(p.getQuantity() > p.getWare().getDisposableState())

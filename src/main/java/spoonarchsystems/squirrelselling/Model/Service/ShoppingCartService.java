@@ -8,4 +8,5 @@ public interface ShoppingCartService {
     boolean update(ShoppingCart cart);
     boolean remove(ShoppingCartPosition cartPosition);
     void clear();
+    double getSum();
 }

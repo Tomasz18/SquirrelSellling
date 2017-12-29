@@ -1,11 +1,14 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCart {
     private List<ShoppingCartPosition> positions;
 
     public List<ShoppingCartPosition> getPositions() {
+        if(positions == null)
+            positions = new ArrayList<>();
         return positions;
     }
 
