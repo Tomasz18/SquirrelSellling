@@ -32,12 +32,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public boolean remove(ShoppingCartPosition cartPosition) {
+    public boolean remove(int number) {
         List<ShoppingCartPosition> positions = shoppingCart.getPositions();
-        if(!positions.contains(cartPosition))
-            return false;
-        positions.remove(cartPosition);
-        return true;
+        boolean removed = false;
+        for(int i = 0; i < positions.size(); i++) {
+            if (positions.get(i).getNumber() == number) {
+                positions.remove(i);
+                removed = true;
+            }
+            if(i < positions.size() && removed)
+                positions.get(i).setNumber(i);
+        }
+        return removed;
     }
 
     @Override
