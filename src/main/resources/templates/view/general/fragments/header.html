@@ -14,7 +14,7 @@
     <a class="nav-link" th:href="@{/addUser}">Add User</a>
 </nav>
 -->
-<div class="container-fluid" th:fragment="header">
+<div class="container-fluid" th:fragment="header (scSum, scSize)">
     <!-- BANNER -->
     <div class="row justify-content-between mr-3 ml-3 mt-3">
         <div class="col-md-auto align-self-center">
@@ -32,9 +32,9 @@
             <p><a class="card-link" th:href="@{/}">Username</a> | <a class="card-link ml-0" th:href="@{/}">Wyloguj</a></p>
             <div class="row justify-content-end align-items-center text-right">
                 <div class="col-md-auto">
-                    <a class="card-link text-dark" th:href="@{/shoppingCart}">0,00 zł</a>
+                    <a class="card-link text-dark" th:href="@{/shoppingCart}" th:text="${scSum + ' zł'}"></a>
                     <br/>
-                    <a class="card-link text-dark" th:href="@{/shoppingCart}">0 towarów</a>
+                    <a class="card-link text-dark" th:href="@{/shoppingCart}" th:text="${scSize + ' pozycje'}"></a>
                 </div>
                 <div class="col-md-auto">
                     <a style="color:#000" th:href="@{/shoppingCart}"><i class="fas fa-shopping-cart fa-3x"></i></a>

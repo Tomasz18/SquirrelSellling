@@ -7,44 +7,48 @@
     <link th:replace="view/general/fragments/resources :: csss"/>
 </head>
 <body>
-<div th:replace="view/general/fragments/header::header"></div>
+<div th:replace="view/general/fragments/header::header (${shoppingCartSum}, ${shoppingCartSize})"></div>
 <div class="container-fluid mx-auto my-4">
-    <!--<form th:action="@{/}" th:object="${shoppingCartPositions}" method="post">-->
-        <h3>Towary w koszyku</h3>
-        <div class="card my-2 py-1" th:each="cp : ${shoppingCartPositions}">
-            <div class="row justify-content-between align-items-center mx-0">
-                <div class="row align-items-center justify-content-start mx-0">
-                    <div class="col-md-auto">
-                        <i class="fas fa-cube fa-3x"></i>
-                    </div>
-                    <div class="col-md-auto">
-                        <h5 class="mb-0" th:text="${cp.getWare().getName()}">Nazwa</h5>
-                    </div>
+    <h3>Towary w koszyku</h3>
+    <div class="card my-2 py-1" th:each="cp : ${shoppingCartPositions}">
+        <div class="row justify-content-between align-items-center mx-0">
+            <div class="row align-items-center justify-content-start mx-0">
+                <div class="col-md-auto">
+                    <i class="fas fa-cube fa-3x"></i>
                 </div>
-                <div class="row align-items-center mx-0">
-                    <div class="col text-right" style="width:150px">
-                        <input type="number" class="form-control" th:value="${cp.getQuantity()}"/>
-                    </div>
-                    <div class="col text-right" style="width:200px">
-                        <h4 class="mb-0" th:text="${cp.getPrice() + ' zł'}">Cena</h4>
-                    </div>
-                    <div class="col text-right">
-                        <form action="#" th:action="@{/shoppingCart}" th:object="${cp}" method="post">
-                            <button type="submit" th:value="${cp.getNumber()}" name="removePos" class="btn btn-secondary"><i class="fas fa-times fa-2x"></i></button>
-                        </form>
-                    </div>
+                <div class="col-md-auto">
+                    <h5 class="mb-0" th:text="${cp.getWare().getName()}">Nazwa</h5>
+                </div>
+            </div>
+            <div class="row align-items-center mx-0">
+                <div class="col text-right" style="width:150px">
+                    <input type="number" class="form-control" th:value="${cp.getQuantity()}"/>
+                </div>
+                <div class="col text-right" style="width:200px">
+                    <h4 class="mb-0" th:text="${cp.getPrice() + ' zł'}">Cena</h4>
+                </div>
+                <div class="col text-right">
+                    <form action="#" th:action="@{/shoppingCart}" method="post">
+                        <button type="submit" th:value="${cp.getNumber()}" name="removePos" class="btn btn-secondary"><i class="fas fa-times fa-2x"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-between mx-0 mt-3 mb-4">
-            <button type="button" class="btn btn-light"><i class="fas fa-eraser fa-2x" style="vertical-align: middle;"></i> Wyczyść koszyk</button>
-            <h4 th:text="${'Suma: ' + shoppingCartSum + ' zł'}"></h4>
-        </div>
-        <div class="row justify-content-between mx-0">
-            <button type="button" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Kontynuuj zakupy</button>
-            <button type="button" class="btn btn-light"><i class="fas fa-angle-right fa-2x" style="vertical-align: middle;"></i> Złóż zamówienie</button>
-        </div>
-    <!--</form>-->
+    </div>
+    <div class="row justify-content-between mx-0 mt-3 mb-4">
+        <form th:action="@{/home}">
+            <button type="submit" name="clearCart" class="btn btn-light"><i class="fas fa-eraser fa-2x" style="vertical-align: middle;"></i> Wyczyść koszyk</button>
+        </form>
+        <h4 th:text="${'Suma: ' + shoppingCartSum + ' zł'}"></h4>
+    </div>
+    <div class="row justify-content-between mx-0">
+        <form th:action="@{/home}">
+            <button type="submit" name="continueShopping" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Kontynuuj zakupy</button>
+        </form>
+        <form th:action="@{/orderForm}">
+            <button type="submit" name="placeOrder" class="btn btn-light"><i class="fas fa-angle-right fa-2x" style="vertical-align: middle;"></i> Złóż zamówienie</button>
+        </form>
+    </div>
 </div>
 <footer th:replace="view/general/fragments/footer :: footer"></footer>
 <!--Bootstrap JS-->

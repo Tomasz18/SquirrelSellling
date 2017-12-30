@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class WareController {
-    private static final String SHOPPING_CART = "view/general/shopping_cart";
-    private static final String HOME = "view/general/home";
-
     @Autowired
     private ShoppingCartService shoppingCartService;
 
@@ -26,7 +23,8 @@ public class WareController {
             shoppingCartService.initTestData();
         model.addAttribute("shoppingCartPositions", shoppingCartService.getShoppingCart().getPositions());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
-        return SHOPPING_CART;
+        model.addAttribute("shoppingCartSize", shoppingCartService.getSize());
+        return "view/general/shopping_cart";
     }
 
     @RequestMapping(value="/shoppingCart", params={"removePos"})
@@ -34,7 +32,23 @@ public class WareController {
         final Integer posNumber = Integer.valueOf(req.getParameter("removePos"));
         shoppingCartService.remove(posNumber);
         if(shoppingCartService.getShoppingCart().getPositions().isEmpty())
-            return HOME;
+            return "view/general/home";
         return "redirect:/shoppingCart";
+    }
+
+    @RequestMapping(value="/home", params={"clearCart"})
+    public String clearShoppingCart() {
+        shoppingCartService.clear();
+        return "redirect:/";
+    }
+
+    @RequestMapping(value="/home", params={"continueShopping"})
+    public String continueShopping() {
+        return "redirect:/";
+    }
+
+    @RequestMapping(value="/orderForm", params={"placeOrder"})
+    public String placeOrder() {
+        return "view/general/order_form";
     }
 }

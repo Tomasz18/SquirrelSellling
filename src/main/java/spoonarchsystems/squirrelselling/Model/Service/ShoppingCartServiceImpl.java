@@ -59,6 +59,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return sum;
     }
 
+    @Override
+    public int getSize() {
+        return shoppingCart.getPositions().size();
+    }
+
+    @Override
     public void initTestData() {
         ShoppingCart cart = new ShoppingCart();
         List<ShoppingCartPosition> posList = new ArrayList<>();

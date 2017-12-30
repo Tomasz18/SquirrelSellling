@@ -9,5 +9,6 @@ public interface ShoppingCartService {
     boolean remove(int number);
     void clear();
     double getSum();
+    int getSize();
     void initTestData();
 }
