@@ -22,7 +22,7 @@
             </div>
             <div class="row align-items-center mx-0">
                 <div class="col text-right" style="width:150px">
-                    <input type="number" class="form-control" th:value="${cp.getQuantity()}"/>
+                    <input type="number" min="1" th:max="${cp.getWare().getDisposableState()}" class="form-control" th:value="${cp.getQuantity()}"/>
                 </div>
                 <div class="col text-right" style="width:200px">
                     <h4 class="mb-0" th:text="${cp.getPrice() + ' zł'}">Cena</h4>
