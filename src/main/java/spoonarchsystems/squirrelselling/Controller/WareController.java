@@ -20,6 +20,7 @@ public class WareController {
 
     @GetMapping("/shoppingCart")
     public String shoppingCart(Model model) {
+        shoppingCartService.initTestData();
         model.addAttribute("shoppingCartPositions", shoppingCartService.getShoppingCart().getPositions());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         return "view/general/shopping_cart";
