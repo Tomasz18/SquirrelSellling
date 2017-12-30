@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link th:replace="view/general/fragments/resources::csss" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/squirrel.css}"/>
+</head>
+<body>
+<div th:replace="view/general/fragments/header::header"></div>
+<h1 class="ml-3" th:text="${order.number}"></h1>
+<div class="container-fluid">
+    <div class="row justify-content-between" th:object="${order}">
+        <div class="col-4">
+            <div class="row">
+                <div class="col">
+                    <h4 th:text="*{status}"></h4>
+                </div>
+            </div>
+            <div class="row justify-content-start ml-1">
+                <div class="col-6">
+                    Data złożenia
+                </div>
+                <div class="col-6" th:text="*{submissionDate}"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Data sprzedaży
+                </div>
+                <div class="col-6" th:text="*{saleDate}?: '-'"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Czas realizacji
+                </div>
+                <div class="col-6" th:text="(*{realizationTime}?: '0') + ' dni'"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Czas odroczenia
+                </div>
+                <div class="col-6" th:text="|*{postponementTime} dni|"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Czas dostawy
+                </div>
+                <div class="col-6" th:text="(*{deliveryTime}?: '0') + ' dni'"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Odbiór osobisty
+                </div>
+                <div class="col-6" th:text="(*{personalCollection} == true)? 'Tak' : 'Nie'"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-2">
+                <div class="col-6">
+                    Koszt dostawy
+                </div>
+                <div class="col-6" th:text="(${#numbers.formatDecimal((deliveryCost)?: 0,1,2)}) + ' zł'"></div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-4">
+                <div class="col-6">
+                    <h5>Wartość</h5>
+                </div>
+                <div class="col-6">
+                    <h5><!-- ##value## -->2761,35 zł</h5>
+                </div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-4">
+                <div class="col-10">
+                    <a class="btn btn-outline-primary btn-block" href="#" role="button">Złoż reklamację</a>
+                </div>
+            </div>
+            <div class="row justify-content-start ml-1 mt-3">
+                <div class="col-10">
+                    <a class="btn btn-outline-primary btn-block" href="#" role="button">Skontaktuj się ze sprzedawcą</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="bordered-container">
+                <div class="bordered-container-title">Zawartość zamówienia</div>
+                <table class="table table-sm borderless">
+                    <thead>
+                    <tr>
+                        <th scope="col">Produkt</th>
+                        <th scope="col">Ilość</th>
+                        <th class="text-right" scope="col">Cena</th>
+                        <th class="text-right" scope="col">Koszt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Wiertatko-wkrętarka Bosh S7200</td>
+                        <td>1 szt. </td>
+                        <td class="text-right">2312,65 zł</td>
+                        <td class="text-right">2312,65 zł</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-right"><h5>2711,35 zł</h5></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="view/general/fragments/footer::footer"></footer>
+<div th:replace="view/general/fragments/resources::scripts"></div>
+</body>
+</html>
