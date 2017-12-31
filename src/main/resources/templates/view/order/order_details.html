@@ -57,19 +57,22 @@
                 <div class="col-6">
                     Koszt dostawy
                 </div>
-                <div class="col-6" th:text="(${#numbers.formatDecimal((deliveryCost)?: 0,1,2)}) + ' zł'"></div>
+                <div class="col-6" th:text="(${#numbers.formatDecimal((order.deliveryCost)?: 0, 1, 2)}) + ' zł'"></div>
             </div>
             <div class="row justify-content-start ml-1 mt-4">
                 <div class="col-6">
                     <h5>Wartość</h5>
                 </div>
                 <div class="col-6">
-                    <h5><!-- ##value## -->2761,35 zł</h5>
+                    <h5 th:text="(${#numbers.formatDecimal(orderValue + order.deliveryCost, 1, 2)}) + ' zł'"></h5>
                 </div>
             </div>
             <div class="row justify-content-start ml-1 mt-4">
                 <div class="col-10">
-                    <a class="btn btn-outline-primary btn-block" href="#" role="button">Złoż reklamację</a>
+                    <form method="post" th:action="@{/complaintForm}">
+                        <input type="hidden" th:field="${order.id}" />
+                        <button type="submit" class="btn btn-outline-primary btn-block">Złoż reklamację</button>
+                    </form>
                 </div>
             </div>
             <div class="row justify-content-start ml-1 mt-3">
@@ -91,14 +94,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Wiertatko-wkrętarka Bosh S7200</td>
-                        <td>1 szt. </td>
-                        <td class="text-right">2312,65 zł</td>
-                        <td class="text-right">2312,65 zł</td>
+                    <tr th:each="position : ${order.positions}">
+                        <td th:text="${position.ware.name}"></td>
+                        <td th:text="(${#numbers.formatInteger(position.quantity, 1)}) + ' ' + ${position.ware.unit}">1 szt. </td>
+                        <td class="text-right" th:text="${#numbers.formatDecimal(position.price, 1, 2)} + ' zł'"></td>
+                        <td class="text-right" th:text="${#numbers.formatDecimal(position.price * position.quantity, 1, 2)} + ' zł'">2312,65 zł</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="text-right"><h5>2711,35 zł</h5></td>
+                        <td colspan="4" class="text-right"><h5 th:text="${#numbers.formatDecimal(orderValue, 1, 2)} + ' zł'"></h5></td>
                     </tr>
                     </tbody>
                 </table>
@@ -106,7 +109,6 @@
         </div>
     </div>
 </div>
-
 <footer th:replace="view/general/fragments/footer::footer"></footer>
 <div th:replace="view/general/fragments/resources::scripts"></div>
 </body>
