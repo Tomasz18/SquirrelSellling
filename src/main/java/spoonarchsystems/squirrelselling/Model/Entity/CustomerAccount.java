@@ -27,7 +27,7 @@ public class CustomerAccount {
     private String email;
 
     @Column(name = "typKlienta", length = 1, nullable = false)
-    private char customerType;
+    private Character customerType;
 
     public int getId() {
         return id;
@@ -77,11 +77,11 @@ public class CustomerAccount {
         this.email = email;
     }
 
-    public char getCustomerType() {
+    public Character getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(char customerType) {
+    public void setCustomerType(Character customerType) {
         this.customerType = customerType;
     }
 }

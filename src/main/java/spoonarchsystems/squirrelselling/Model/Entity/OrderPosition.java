@@ -18,13 +18,13 @@ public class OrderPosition {
     private Ware ware;
 
     @Column(name = "ilosc", nullable = false)
-    private double quantity;
+    private Double quantity;
 
     @Column(name = "cena", nullable = false)
-    private double price;
+    private Double price;
 
     @Column(name = "numer", nullable = false)
-    private int number;
+    private Integer number;
 
     public Order getOrder() {
         return order;
@@ -42,27 +42,27 @@ public class OrderPosition {
         this.ware = ware;
     }
 
-    public double getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 }

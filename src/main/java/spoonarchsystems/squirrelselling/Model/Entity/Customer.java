@@ -34,7 +34,7 @@ public class Customer implements Serializable{
     private String phone;
 
     @Column(name = "typKlienta", nullable = false, length = 1)
-    private char customerType;
+    private Character customerType;
 
     public int getId() {
         return id;
@@ -76,11 +76,11 @@ public class Customer implements Serializable{
         this.phone = phone;
     }
 
-    public char getCustomerType() {
+    public Character getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(char customerType) {
+    public void setCustomerType(Character customerType) {
         this.customerType = customerType;
     }
 

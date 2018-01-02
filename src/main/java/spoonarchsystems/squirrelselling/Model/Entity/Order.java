@@ -55,7 +55,7 @@ public class Order {
     private Date saleDate;
 
     @Column(name = "reklamacyjne", nullable = false)
-    private boolean complaining;
+    private Boolean complaining;
 
     @Column(name = "dataSkompletowania")
     @Temporal(TemporalType.DATE)
@@ -65,10 +65,10 @@ public class Order {
     private Integer deliveryTime;
 
     @Column(name = "odbiorOsobisty", nullable = false)
-    private boolean personalCollection;
+    private Boolean personalCollection;
 
     @Column(name = "kosztDostawy", nullable = false)
-    private double deliveryCost;
+    private Double deliveryCost;
 
     @Column(name = "dataOdbioru")
     @Temporal(TemporalType.DATE)
@@ -146,11 +146,11 @@ public class Order {
         this.saleDate = saleDate;
     }
 
-    public boolean isComplaining() {
+    public Boolean isComplaining() {
         return complaining;
     }
 
-    public void setComplaining(boolean complaining) {
+    public void setComplaining(Boolean complaining) {
         this.complaining = complaining;
     }
 
@@ -170,19 +170,19 @@ public class Order {
         this.deliveryTime = deliveryTime;
     }
 
-    public boolean isPersonalCollection() {
+    public Boolean isPersonalCollection() {
         return personalCollection;
     }
 
-    public void setPersonalCollection(boolean personalCollection) {
+    public void setPersonalCollection(Boolean personalCollection) {
         this.personalCollection = personalCollection;
     }
 
-    public double getDeliveryCost() {
+    public Double getDeliveryCost() {
         return deliveryCost;
     }
 
-    public void setDeliveryCost(double deliveryCost) {
+    public void setDeliveryCost(Double deliveryCost) {
         this.deliveryCost = deliveryCost;
     }
 

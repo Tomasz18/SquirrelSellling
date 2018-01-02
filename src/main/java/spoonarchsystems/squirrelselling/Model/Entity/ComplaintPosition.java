@@ -18,10 +18,10 @@ public class ComplaintPosition {
     private Complaint complaint;
 
     @Column(name = "ilosc", nullable = false)
-    private double quantity;
+    private Double quantity;
 
     @Column(name = "numer", nullable = false)
-    private int number;
+    private Integer number;
 
     public Ware getWare() {
         return ware;
@@ -39,19 +39,19 @@ public class ComplaintPosition {
         this.complaint = complaint;
     }
 
-    public double getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 }
