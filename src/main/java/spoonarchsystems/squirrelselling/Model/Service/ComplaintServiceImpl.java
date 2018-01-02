@@ -23,6 +23,7 @@ public class ComplaintServiceImpl implements ComplaintService {
             positions.add(complaintPosition);
         }
         complaintForm.setPositions(positions);
+        complaintForm.setOrder(order);
         return complaintForm;
     }
 }
