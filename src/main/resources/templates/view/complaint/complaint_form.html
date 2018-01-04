@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/squirrel.css}"/>
 </head>
 <body>
-<!--<div th:replace="view/general/fragments/header::header"></div>-->
+<div th:replace="view/general/fragments/header::header"></div>
 <h1 class="ml-3" th:text="${order.number}"></h1>
 <div class="container-fluid">
     <div class="row justify-content-between" th:object="${order}">
@@ -86,7 +86,7 @@
                         <tr th:each="position, status : ${complaintForm.positions}">
                             <td>
                                 <div class="form-check float-right">
-                                    <input th:field="${complaintForm.positions[__${status.index}__]}" th:value="${order.positions[__${status.index}__].number}" class="form-check-input" type="checkbox" id="blankCheckbox" />
+                                    <input th:field="${complaintForm.positions[__${status.index}__].number}" th:value="${order.positions[__${status.index}__].number}" class="form-check-input" type="checkbox" id="blankCheckbox" />
                                 </div>
                             </td>
                             <td th:text="${order.positions[__${status.index}__].ware.name}"></td>
@@ -102,11 +102,12 @@
                             <td class="text-right" th:text="${#numbers.formatDecimal(order.positions[__${status.index}__].price, 1, 2)} + ' zł'"></td>
                             <td class="text-right" th:text="${#numbers.formatDecimal(order.positions[__${status.index}__].price * order.positions[__${status.index}__].quantity, 1, 2)} + ' zł'"></td>
                         </tr>
-                        <tr>
-                            <td colspan="5" class="text-right"><h5 th:text="${#numbers.formatDecimal(orderValue, 1, 2)} + ' zł'"></h5></td>
-                        </tr>
                         </tbody>
                     </table>
+                    <th:block th:if="${errors != null}" th:each="error : ${errors}" th:switch="${error}">
+                        <div th:case="0" class="text-danger mb-2">Nieprawidłowy towar. Spróbuj złożyć reklamację jeszcze raz. Jeśli problem będzie się powtarzał skontaktuj się z pracownikiem hurtowni.</div>
+                        <div th:case="1" class="text-danger mb-2">Nieprawidłowa ilość towarów (0 lub przekraczająca ilość towarów w zamówieniu) lub nie wybrano żadnego towaru.</div>
+                    </th:block>
                 </div>
                 <input type="hidden" th:field="${complaintForm.order.id}" />
                 <button type="submit" class="btn btn-outline-primary float-right mt-2">Dodaj do reklamacji</button>
