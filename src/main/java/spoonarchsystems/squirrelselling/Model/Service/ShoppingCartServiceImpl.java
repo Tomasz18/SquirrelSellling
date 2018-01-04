@@ -1,7 +1,10 @@
 package spoonarchsystems.squirrelselling.Model.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import spoonarchsystems.squirrelselling.Model.DAO.WareDAO;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCartPosition;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
@@ -24,10 +28,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public boolean update(ShoppingCart cart) {
-        if(!validateQuantity(cart) || !validatePrice(cart))
+    public boolean updateQuantity(ShoppingCart cart) {
+        List<ShoppingCartPosition> positions = shoppingCart.getPositions();
+        List<ShoppingCartPosition> quantities = cart.getPositions();
+        if(!validateQuantity(quantities, positions))
             return false;
-        shoppingCart.setPositions(cart.getPositions());
+        for(int i = 0; i < positions.size(); i++) {
+            ShoppingCartPosition p = positions.get(i);
+            double q = quantities.get(i).getQuantity();
+            p.setQuantity(q);
+            Ware w = p.getWare();
+            p.setPrice(q * (q < w.getWholesaleThreshold() ? w.getRetailPrice() : w.getWholesalePrice()));
+        }
         return true;
     }
 
@@ -66,7 +78,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void initTestData() {
-        ShoppingCart cart = new ShoppingCart();
         List<ShoppingCartPosition> posList = new ArrayList<>();
         ShoppingCartPosition pos;
         Ware ware;
@@ -79,26 +90,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             pos.setPrice(i * 10 * (i * 10 < ware.getWholesaleThreshold() ? ware.getRetailPrice() : ware.getWholesalePrice()));
             posList.add(pos);
         }
-        cart.setPositions(posList);
-        update(cart);
+        shoppingCart.setPositions(posList);
     }
 
-    private boolean validateQuantity(ShoppingCart cart) {
-        for(ShoppingCartPosition p : cart.getPositions()) {
-            if(p.getQuantity() > p.getWare().getDisposableState())
+    private boolean validateQuantity(List<ShoppingCartPosition> quantities, List<ShoppingCartPosition> positions) {
+        for(int i = 0; i < positions.size(); i++)
+            if(quantities.get(i).getQuantity() > positions.get(i).getWare().getDisposableState())
                 return false;
-        }
-        return true;
-    }
-
-    private boolean validatePrice(ShoppingCart cart) {
-        for(ShoppingCartPosition p : cart.getPositions()) {
-            double q = p.getQuantity();
-            Ware w = p.getWare();
-            double price = q * (q < w.getWholesaleThreshold() ? w.getRetailPrice() : w.getWholesalePrice());
-            if(price != p.getPrice())
-                return false;
-        }
         return true;
     }
 }
