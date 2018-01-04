@@ -40,12 +40,6 @@ public class WareController {
         return "redirect:/";
     }
 
-    @PostMapping(value="/orderForm")
-    public String placeOrder(@ModelAttribute ShoppingCart shoppingCart) {
-        shoppingCartService.updateQuantity(shoppingCart);
-        return "view/general/order_form";
-    }
-
     @RequestMapping(value="/home", params={"continueShopping"})
     public String continueShopping() {
         return "redirect:/";
