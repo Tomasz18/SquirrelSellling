@@ -25,8 +25,8 @@
                     <div class="col text-right" style="width:150px">
                         <input type="number" min="1" th:max="${cp.ware.disposableState}" class="form-control" th:field="${shoppingCart.positions[__${status.index}__].quantity}" th:value="${cp.quantity}"/>
                     </div>
-                    <div class="col text-right" style="width:200px">
-                        <h4 class="mb-0" th:text="${cp.price + ' zł'}">Cena</h4>
+                    <div class="col text-right" style="width:320px">
+                        <h4 class="mb-0" th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}">Cena</h4>
                     </div>
                     <div class="col text-right">
                         <button type="submit" formaction="/shoppingCart" th:value="${cp.number}" name="removePos" class="btn btn-secondary"><i class="fas fa-times fa-2x"></i></button>
@@ -36,7 +36,7 @@
         </div>
         <div class="row justify-content-between mx-0 mt-3 mb-4">
             <button type="submit" formaction="/home" name="clearCart" class="btn btn-light"><i class="fas fa-eraser fa-2x" style="vertical-align: middle;"></i> Wyczyść koszyk</button>
-            <h4 th:text="${'Suma: ' + shoppingCartSum + ' zł'}"></h4>
+            <h4 th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
         </div>
         <div class="row justify-content-between mx-0">
             <button type="submit" formaction="/home" name="continueShopping" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Kontynuuj zakupy</button>
