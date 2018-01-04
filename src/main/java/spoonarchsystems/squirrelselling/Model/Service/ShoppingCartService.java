@@ -5,7 +5,7 @@ import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCartPosition;
 
 public interface ShoppingCartService {
     ShoppingCart getShoppingCart();
-    boolean update(ShoppingCart cart);
+    boolean updateQuantity(ShoppingCart cart);
     boolean remove(int number);
     void clear();
     double getSum();

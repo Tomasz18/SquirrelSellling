@@ -3,13 +3,11 @@ package spoonarchsystems.squirrelselling.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCartPosition;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -21,7 +19,7 @@ public class WareController {
     public String shoppingCart(Model model) {
         if(shoppingCartService.getShoppingCart().getPositions() == null || shoppingCartService.getShoppingCart().getPositions().isEmpty())
             shoppingCartService.initTestData();
-        model.addAttribute("shoppingCartPositions", shoppingCartService.getShoppingCart().getPositions());
+        model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         model.addAttribute("shoppingCartSize", shoppingCartService.getSize());
         return "view/general/shopping_cart";
@@ -42,13 +40,14 @@ public class WareController {
         return "redirect:/";
     }
 
+    @PostMapping(value="/orderForm")
+    public String placeOrder(@ModelAttribute ShoppingCart shoppingCart) {
+        shoppingCartService.updateQuantity(shoppingCart);
+        return "view/general/order_form";
+    }
+
     @RequestMapping(value="/home", params={"continueShopping"})
     public String continueShopping() {
         return "redirect:/";
-    }
-
-    @RequestMapping(value="/orderForm", params={"placeOrder"})
-    public String placeOrder() {
-        return "view/general/order_form";
     }
 }
