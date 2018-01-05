@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Formularz reklamacji</title>
+    <link th:replace="view/general/fragments/resources::csss" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/squirrel.css}"/>
+</head>
+<body>
+<div th:replace="view/general/fragments/header::header"></div>
+<div class="container-fluid">
+<h2 th:text="'Reklamacja do zamówienia ' + ${complaint.order.number}"></h2>
+    <form th:action="@{/makeComplaint}" method="post">
+        <div class="row justify-content-between mt-4">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="description">Opis usterek</label>
+                    <textarea th:field="${complaint.description}" class="form-control" id="description" rows="5"></textarea>
+                </div>
+                <div th:if="${emptyDescription}" class="text-danger">Opis usterek nie może być pusty</div>
+                <div th:if="${connectionError}" class="text-danger">Wystąpił błąd połączenia. Proszę spróbować jeszcze raz. Jeśli błąd będzie się powtarzał proszę skontaktować się z pracownikiem hurtowni.</div>
+            </div>
+            <div class="col-5 mt-4">
+                <div class="bordered-container">
+                    <div class="bordered-container-title">Zawartość reklamacji</div>
+                    <table class="table table-sm borderless">
+                        <thead>
+                        <tr>
+                            <th scope="col">Produkt</th>
+                            <th class="text-right" scope="col">Ilość</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="position : ${complaint.positions}">
+                            <td th:text="${position.ware.name}"></td>
+                            <td class="text-right" th:text="(${#numbers.formatInteger(position.quantity, 1)}) + ' ' + ${position.ware.unit}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="btn btn-outline-primary float-right mt-2">Złóż reklamację</button>
+            </div>
+        </div>
+    </form>
+</div>
+<footer th:replace="view/general/fragments/footer::footer"></footer>
+<div th:replace="view/general/fragments/resources::scripts"></div>
+</body>
+</html>

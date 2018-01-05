@@ -61,6 +61,26 @@ public class ComplaintController {
         Complaint preparedComplaint = complaintService.prepareComplaint(complaint, order);
 
         model.addAttribute("complaint", preparedComplaint);
-        return "view/complaint/description_form";
+        return "view/complaint/complaint_summary";
+    }
+
+    @PostMapping("/makeComplaint")
+    public String makeComplaint(@ModelAttribute Complaint complaint, Model model) {
+        Complaint currentComplaint = complaintService.getCurrentComplaint();
+        if (complaint.getDescription().isEmpty()) {
+            model.addAttribute("emptyDescription", true);
+            model.addAttribute("complaint", currentComplaint);
+            return "view/complaint/complaint_summary";
+        }
+
+        boolean isSaved = complaintService.saveComplaint(complaint);
+
+        if (!isSaved) {
+            model.addAttribute("connectionError", true);
+            model.addAttribute("complaint", currentComplaint);
+            return "view/complaint/complaint_summary";
+        }
+
+        return "view/complaint/complaint_confirmation";
     }
 }

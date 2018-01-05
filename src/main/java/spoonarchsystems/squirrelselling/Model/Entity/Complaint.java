@@ -8,8 +8,13 @@ import java.util.List;
 @Table(name = "reklamacje")
 public class Complaint {
 
+    public enum ComplaintStatus {
+        submitted, accepted, rejected
+    }
+
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @ManyToOne
@@ -20,11 +25,12 @@ public class Complaint {
     @OrderBy("numer")
     private List<ComplaintPosition> positions;
 
-    @Column(name = "numer", columnDefinition = "char(15)", nullable = false)
+    @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
 
     @Column(name = "status", length = 9, nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ComplaintStatus status;
 
     @Column(name = "dataZlozenia", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -65,11 +71,11 @@ public class Complaint {
         this.number = number;
     }
 
-    public String getStatus() {
+    public ComplaintStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ComplaintStatus status) {
         this.status = status;
     }
 
