@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
-import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCartPosition;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +20,7 @@ public class WareController {
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         model.addAttribute("shoppingCartSize", shoppingCartService.getSize());
-        return "view/general/shopping_cart";
+        return "view/ware/shopping_cart";
     }
 
     @RequestMapping(value="/shoppingCart", params={"removePos"})
