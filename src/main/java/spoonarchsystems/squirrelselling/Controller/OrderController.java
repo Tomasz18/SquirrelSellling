@@ -40,6 +40,7 @@ public class OrderController {
     public String placeOrder(@ModelAttribute ShoppingCart shoppingCart, Model model) {
         shoppingCartService.updateQuantity(shoppingCart);
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
+        model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         return "view/order/order_form";
     }
 }

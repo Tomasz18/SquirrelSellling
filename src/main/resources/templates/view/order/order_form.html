@@ -14,122 +14,135 @@
         <div class="col-6"><h3>Dane do zamówienia</h3></div>
         <div class="col-6"><h3>Zawartość zamówienia</h3></div>
     </div>
-    <div class="row mx-0">
-        <div class="col-3">
-            <div class="row mx-0 my-2">
-                <div>
-                    <input type="radio" name="pickup" id="selfPickupRadio" value="selfPickup" checked="checked"/>
-                    <label for="selfPickupRadio">Odbiór osobisty</label>
-                </div>
-                <div class="ml-4">
-                    <input type="radio" name="pickup" id="shippingRadio" value="shipping" />
-                    <label for="shippingRadio">Dostawa</label>
-                </div>
-            </div>
-            <div class="row mx-0 my-3" id="selfPickup">
-                <div class="col-md-auto bordered-container px-3">
-                    <div class="bordered-container-title">Adres do odbioru</div>
-                    <h6 class="my-3">Placówka główna hurtowni</h6>
-                    <p>ul. Balsamiczna 99<br/>50-518<br/>Wrocław</p>
-                </div>
-            </div>
-            <div class="row mx-0 my-3" id="shipping">
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-5 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Nr budynku"/>
-                </div>
-                <div class="col-5 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Nr lokalu"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz miasto"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
-                </div>
-                <div class="col-5 px-0 mt-4"><h6>Forma dostawy:</h6></div>
-                <div class="col-5 px-0 mt-4 text-right"><h6>Kurier DPD</h6></div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="row mx-0 my-2">
-                <h6>Wybierz rodzaj rachunku</h6>
-                <div class="w-100"></div>
-                <div>
-                    <input type="radio" name="bill" id="receiptRadio" value="receipt" checked="checked"/>
-                    <label for="receiptRadio">Paragon</label>
-                </div>
-                <div class="ml-4">
-                    <input type="radio" name="bill" id="invoiceRadio" value="invoice" />
-                    <label for="invoiceRadio">Faktura</label>
-                </div>
-            </div>
-            <div id="receipt"></div>
-            <div class="row mx-0" id="invoice">
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-5 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Nr budynku"/>
-                </div>
-                <div class="col-5 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Nr lokalu"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz miasto"/>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-10 px-0 my-1">
-                    <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
-                </div>
-            </div>
-            <div class="row mx-0 my-3">
-                <div>
-                    <input type="checkbox" name="postponement" id="postponementCheckbox" value="postponement"/>
-                    <label for="postponementCheckbox">Zamówienie odroczone</label>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-8 mx-0" id="postponementNo">
-                    <i>Masz możliwość odroczenia realizacji
-                    zamówienia na termin od 7 do 30 dni
-                        późniejszy licząc od daty bieżącej</i>
-                </div>
-                <div class="col-8 mx-0" id="postponementYes">
-                    <input type="date" class="form-control"/>
-                    Wybierz oczekiwaną datę dostarczenia zamówienia
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="card my-2 py-1" th:each="cp, status : ${shoppingCart.positions}">
-                <div class="row justify-content-between align-items-center mx-0">
-                    <div class="row align-items-center justify-content-start mx-0">
-                        <div class="col-md-auto">
-                            <i class="fas fa-cube fa-3x"></i>
-                        </div>
-                        <div class="col-md-auto">
-                            <h5 class="mb-0" th:text="${cp.ware.name}">Nazwa</h5>
-                        </div>
+    <form th:action="post">
+        <div class="row mx-0">
+            <div class="col-3">
+                <div class="row mx-0 my-2">
+                    <div>
+                        <input type="radio" name="pickup" id="selfPickupRadio" checked="checked"/>
+                        <label for="selfPickupRadio">Odbiór osobisty</label>
                     </div>
-                    <div class="row align-items-center mx-0">
-                        <div class="col text-right" style="width:150px">
-                            <h5 class="my-0" th:text="${'x ' + cp.quantity}"></h5>
-                        </div>
-                        <div class="col text-right" style="width:320px">
-                            <h4 class="mb-0" th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}">Cena</h4>
-                        </div>
+                    <div class="ml-4">
+                        <input type="radio" name="pickup" id="shippingRadio" />
+                        <label for="shippingRadio">Dostawa</label>
+                    </div>
+                </div>
+                <div class="row mx-0 my-3" id="selfPickup">
+                    <div class="col-md-auto bordered-container px-3">
+                        <div class="bordered-container-title">Adres do odbioru</div>
+                        <h6 class="my-3">Placówka główna hurtowni</h6>
+                        <p>ul. Balsamiczna 99<br/>50-518<br/>Wrocław</p>
+                    </div>
+                </div>
+                <div class="row mx-0 my-3" id="shipping">
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-5 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Nr budynku"/>
+                    </div>
+                    <div class="col-5 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Nr lokalu"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz miasto"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
+                    </div>
+                    <div class="col-5 px-0 mt-4"><h6>Forma dostawy:</h6></div>
+                    <div class="col-5 px-0 mt-4 text-right"><h6>Kurier DPD</h6></div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row mx-0 my-2">
+                    <h6>Wybierz rodzaj rachunku</h6>
+                    <div class="w-100"></div>
+                    <div>
+                        <input type="radio" name="bill" id="receiptRadio" checked="checked"/>
+                        <label for="receiptRadio">Paragon</label>
+                    </div>
+                    <div class="ml-4">
+                        <input type="radio" name="bill" id="invoiceRadio"/>
+                        <label for="invoiceRadio">Faktura</label>
+                    </div>
+                </div>
+                <div id="receipt"></div>
+                <div class="row mx-0" id="invoice">
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-5 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Nr budynku"/>
+                    </div>
+                    <div class="col-5 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Nr lokalu"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz miasto"/>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-10 px-0 my-1">
+                        <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
+                    </div>
+                </div>
+                <div class="row mx-0 my-3">
+                    <div>
+                        <input type="checkbox" name="postponement" id="postponementCheckbox" th:checked="false"/>
+                        <label for="postponementCheckbox">Zamówienie odroczone</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-8 mx-0" id="postponementNo">
+                        <i>Masz możliwość odroczenia realizacji
+                            zamówienia na termin od 7 do 30 dni
+                            późniejszy licząc od daty bieżącej</i>
+                    </div>
+                    <div class="col-8 mx-0" id="postponementYes">
+                        <input type="date" class="form-control"/>
+                        Wybierz oczekiwaną datę dostarczenia zamówienia
                     </div>
                 </div>
             </div>
+            <div class="col-6">
+                <div class="card my-2 py-1" th:each="cp, status : ${shoppingCart.positions}">
+                    <div class="row justify-content-between align-items-center mx-0">
+                        <div class="row align-items-center justify-content-start mx-0">
+                            <div class="col-md-auto">
+                                <i class="fas fa-cube fa-3x"></i>
+                            </div>
+                            <div class="col-md-auto">
+                                <h5 class="mb-0" th:text="${cp.ware.name}">Nazwa</h5>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mx-0">
+                            <div class="col text-right" style="width:150px">
+                                <h5 class="my-0" th:text="${'x ' + cp.quantity}"></h5>
+                            </div>
+                            <div class="col text-right" style="width:320px">
+                                <h4 class="mb-0" th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}">Cena</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <h4 th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="row mb-0 mt-5">
+            <div class="col-6">
+                <button type="submit" formaction="/shoppingCart" name="backToCart" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Wróc do koszyka</button>
+            </div>
+            <div class="col-6 text-right">
+                <button type="submit" formaction="/" name="next" class="btn btn-light"><i class="fas fa-angle-right fa-2x" style="vertical-align: middle;"></i> Dalej</button>
+            </div>
+        </div>
+    </form>
 </div>
 <footer th:replace="view/general/fragments/footer :: footer"></footer>
 <!--Bootstrap JS-->
