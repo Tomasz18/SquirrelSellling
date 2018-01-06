@@ -8,7 +8,7 @@
 </head>
 <body>
 <div th:replace="view/general/fragments/header::header"></div>
-<div class="container-fluid mx-auto my-4">
+<div class="container-fluid mx-auto my-4 content">
     <h3>Towary w koszyku</h3>
     <form method="post" onkeypress="return event.keyCode != 13;">
         <div class="card my-2 py-1" th:each="cp, status : ${shoppingCart.positions}">
