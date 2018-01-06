@@ -15,8 +15,6 @@ public class HomeController {
     public String home(Model model) {
         if(shoppingCartService.getShoppingCart().getPositions() == null)
             shoppingCartService.initTestData();
-        model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
-        model.addAttribute("shoppingCartSize", shoppingCartService.getSize());
         return "view/general/home";
     }
 }

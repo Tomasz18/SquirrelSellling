@@ -19,7 +19,6 @@ public class WareController {
             shoppingCartService.initTestData();
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
-        model.addAttribute("shoppingCartSize", shoppingCartService.getSize());
         return "view/ware/shopping_cart";
     }
 
