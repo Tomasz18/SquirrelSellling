@@ -43,4 +43,9 @@ public class OrderController {
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         return "view/order/order_form";
     }
+
+    @GetMapping(value="/orderSummary")
+    public String orderSummary() {
+        return "view/order/order_summary";
+    }
 }

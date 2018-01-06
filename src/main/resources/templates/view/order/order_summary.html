@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Podsumowanie zamówienia</title>
+    <!--Bootstrap CSS-->
+    <link th:replace="view/general/fragments/resources :: csss"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/squirrel.css}"/>
+</head>
+<body>
+    <div class="container-fluid mx-auto my-4">
+        <h3>Podsumowanie zamówienia</h3>
+    </div>
+    <footer th:replace="view/general/fragments/footer :: footer"></footer>
+    <!--Bootstrap JS-->
+    <div th:replace="view/general/fragments/resources :: scripts"></div>
+    <script th:src="@{/js/tomkowe-cudo.js}"></script>
+</body>
+</html>
