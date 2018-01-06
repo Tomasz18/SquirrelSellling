@@ -10,7 +10,7 @@
 <div th:replace="view/general/fragments/header::header (${shoppingCartSum}, ${shoppingCartSize})"></div>
 <div class="container-fluid mx-auto my-4">
     <h3>Towary w koszyku</h3>
-    <form method="post">
+    <form method="post" onkeypress="return event.keyCode != 13;">
         <div class="card my-2 py-1" th:each="cp, status : ${shoppingCart.positions}">
             <div class="row justify-content-between align-items-center mx-0">
                 <div class="row align-items-center justify-content-start mx-0">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="row align-items-center mx-0">
                     <div class="col text-right" style="width:150px">
-                        <input type="number" min="1" th:max="${cp.ware.disposableState}" class="form-control" th:field="${shoppingCart.positions[__${status.index}__].quantity}" th:value="${cp.quantity}"/>
+                        <input type="number" min="1" th:max="${cp.ware.disposableState}" class="form-control" th:field="${shoppingCart.positions[__${status.index}__].quantity}" th:value="${cp.quantity}" required="required"/>
                     </div>
                     <div class="col text-right" style="width:320px">
                         <h4 class="mb-0" th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}">Cena</h4>
