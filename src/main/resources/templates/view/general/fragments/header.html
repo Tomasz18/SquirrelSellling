@@ -26,7 +26,7 @@
             <p><a class="card-link" th:href="@{/}">Username</a> | <a class="card-link ml-0" th:href="@{/}">Wyloguj</a></p>
             <div class="row justify-content-end align-items-center text-right">
                 <div class="col-md-auto">
-                    <a class="card-link text-dark" th:href="@{/shoppingCart}" th:text="${#numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 1, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></a>
+                    <a id="cartTotalCost" class="card-link text-dark" th:href="@{/shoppingCart}" th:text="${#numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 1, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></a>
                     <br/>
                     <a class="card-link text-dark" th:href="@{/shoppingCart}" th:text="${@shoppingCartServiceImpl.getSize() + ' pozycje'}"></a>
                 </div>
