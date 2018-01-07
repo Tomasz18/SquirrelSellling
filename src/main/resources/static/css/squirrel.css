@@ -26,3 +26,11 @@ body {
 .content {
   flex: 1 0 auto;
 }
+
+.image-button span, .image-button svg {
+    vertical-align: middle;
+}
+
+footer p {
+    margin-bottom: 0;
+}
