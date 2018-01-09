@@ -13,7 +13,15 @@
         <div class="col-4">
             <div class="row">
                 <div class="col">
-                    <h4 th:text="*{status}"></h4>
+                    <th:block th:switch="*{status}">
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).submitted}">Złożone</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).rejected}">Odrzucone</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).waitingForRealization}">Oczekujące na realizację</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).sent}">Wysłane</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).readyToCollect}">Gotowe do odbioru</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).realized}">Zrealizowane</h4>
+                        <h4 th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).canceled}">Anulowane</h4>
+                    </th:block>
                 </div>
             </div>
             <div class="row justify-content-start ml-1">

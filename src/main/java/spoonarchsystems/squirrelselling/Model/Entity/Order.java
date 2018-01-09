@@ -10,6 +10,10 @@ import java.util.Set;
 @Table(name = "zamowienia")
 public class Order {
 
+    public enum OrderStatus {
+        submitted, rejected, waitingForRealization, sent, readyToCollect, realized, canceled
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -38,7 +42,8 @@ public class Order {
     private String number;
 
     @Column(name = "status", nullable = false, length = 25)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @Column(name = "dataZlozenia", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -106,11 +111,11 @@ public class Order {
         this.number = number;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

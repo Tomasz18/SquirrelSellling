@@ -8,7 +8,7 @@
 <body>
 <div th:replace="view/general/fragments/header::header"></div>
 <div class="container-fluid content">
-<h2 th:text="'Reklamacja do zamówienia ' + ${complaint.order.number}"></h2>
+<h2 th:text="'Reklamacja do zamówienia ' + ${@complaintServiceImpl.getCurrentComplaint().getOrder().number}"></h2>
     <form th:action="@{/makeComplaint}" method="post">
         <div class="row justify-content-between mt-4">
             <div class="col-6">
