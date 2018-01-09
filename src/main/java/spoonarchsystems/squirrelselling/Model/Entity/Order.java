@@ -11,7 +11,7 @@ import java.util.Set;
 public class Order {
 
     public enum OrderStatus {
-        submitted, rejected, waiting, sent, ready, realized, cancelled
+        submitted, rejected, waitingForRealization, sent, readyToCollect, realized, canceled
     }
 
     @Id
@@ -36,7 +36,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "adresNabywcy", referencedColumnName = "id")
-    private Address invoiceAddress;
+    private Address byuerAddress;
 
     @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
@@ -205,21 +205,5 @@ public class Order {
 
     public void setComplaints(Set<Complaint> complaints) {
         this.complaints = complaints;
-    }
-
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public Address getInvoiceAddress() {
-        return invoiceAddress;
-    }
-
-    public void setInvoiceAddress(Address invoiceAddress) {
-        this.invoiceAddress = invoiceAddress;
     }
 }

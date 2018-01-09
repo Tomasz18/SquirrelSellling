@@ -7,8 +7,8 @@
     <link th:replace="view/general/fragments/resources :: csss"/>
 </head>
 <body>
-<div th:replace="view/general/fragments/header::header (${shoppingCartSum}, ${shoppingCartSize})"></div>
-<div class="container-fluid mx-auto my-4">
+<div th:replace="view/general/fragments/header::header"></div>
+<div class="container-fluid mx-auto my-4 content">
     <h3>Towary w koszyku</h3>
     <form method="post" onkeypress="return event.keyCode != 13;">
         <div class="card my-2 py-1" th:each="cp, status : ${shoppingCart.positions}">
@@ -24,6 +24,9 @@
                 <div class="row align-items-center mx-0">
                     <div class="col text-right" style="width:150px">
                         <input type="number" min="1" th:max="${cp.ware.disposableState}" class="form-control" th:field="${shoppingCart.positions[__${status.index}__].quantity}" th:value="${cp.quantity}" required="required"/>
+                        <span th:text="${cp.ware.retailPrice}" hidden="hidden"></span>
+                        <span th:text="${cp.ware.wholesalePrice}" hidden="hidden"></span>
+                        <span th:text="${cp.ware.wholesaleThreshold}" hidden="hidden"></span>
                     </div>
                     <div class="col text-right" style="width:320px">
                         <h4 class="mb-0" th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}">Cena</h4>
@@ -36,7 +39,7 @@
         </div>
         <div class="row justify-content-between mx-0 mt-3 mb-4">
             <button type="submit" formaction="/home" name="clearCart" class="btn btn-light"><i class="fas fa-eraser fa-2x" style="vertical-align: middle;"></i> Wyczyść koszyk</button>
-            <h4 th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
+            <h4 id="totalCost" th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
         </div>
         <div class="row justify-content-between mx-0">
             <button type="submit" formaction="/home" name="continueShopping" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Kontynuuj zakupy</button>
@@ -47,5 +50,6 @@
 <footer th:replace="view/general/fragments/footer :: footer"></footer>
 <!--Bootstrap JS-->
 <div th:replace="view/general/fragments/resources :: scripts"></div>
+<script th:src="@{/js/shopping-cart-cost-updater.js}"></script>
 </body>
 </html>

@@ -66,10 +66,8 @@ public class ComplaintController {
 
     @PostMapping("/makeComplaint")
     public String makeComplaint(@ModelAttribute Complaint complaint, Model model) {
-        Complaint currentComplaint = complaintService.getCurrentComplaint();
         if (complaint.getDescription().isEmpty()) {
             model.addAttribute("emptyDescription", true);
-            model.addAttribute("complaint", currentComplaint);
             return "view/complaint/complaint_summary";
         }
 
@@ -77,7 +75,6 @@ public class ComplaintController {
 
         if (!isSaved) {
             model.addAttribute("connectionError", true);
-            model.addAttribute("complaint", currentComplaint);
             return "view/complaint/complaint_summary";
         }
 

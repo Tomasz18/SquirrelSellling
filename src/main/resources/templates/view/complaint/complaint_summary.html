@@ -4,12 +4,11 @@
     <meta charset="UTF-8" />
     <title>Formularz reklamacji</title>
     <link th:replace="view/general/fragments/resources::csss" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/squirrel.css}"/>
 </head>
 <body>
 <div th:replace="view/general/fragments/header::header"></div>
-<div class="container-fluid">
-<h2 th:text="'Reklamacja do zamówienia ' + ${complaint.order.number}"></h2>
+<div class="container-fluid content">
+<h2 th:text="'Reklamacja do zamówienia ' + ${@complaintServiceImpl.getCurrentComplaint().getOrder().number}"></h2>
     <form th:action="@{/makeComplaint}" method="post">
         <div class="row justify-content-between mt-4">
             <div class="col-6">
@@ -31,7 +30,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="position : ${complaint.positions}">
+                        <tr th:each="position : ${@complaintServiceImpl.getCurrentComplaint().positions}">
                             <td th:text="${position.ware.name}"></td>
                             <td class="text-right" th:text="(${#numbers.formatInteger(position.quantity, 1)}) + ' ' + ${position.ware.unit}"></td>
                         </tr>
