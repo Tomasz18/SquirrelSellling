@@ -10,6 +10,10 @@ import java.util.Set;
 @Table(name = "zamowienia")
 public class Order {
 
+    public enum OrderStatus {
+        submitted, rejected, waiting, sent, ready, realized, cancelled
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -32,13 +36,14 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "adresNabywcy", referencedColumnName = "id")
-    private Address byuerAddress;
+    private Address invoiceAddress;
 
     @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
 
     @Column(name = "status", nullable = false, length = 25)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @Column(name = "dataZlozenia", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -106,11 +111,11 @@ public class Order {
         this.number = number;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -200,5 +205,21 @@ public class Order {
 
     public void setComplaints(Set<Complaint> complaints) {
         this.complaints = complaints;
+    }
+
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Address getInvoiceAddress() {
+        return invoiceAddress;
+    }
+
+    public void setInvoiceAddress(Address invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
     }
 }
