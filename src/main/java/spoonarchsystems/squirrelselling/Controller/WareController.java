@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,16 +19,16 @@ public class WareController {
         if(shoppingCartService.getShoppingCart().getPositions() == null || shoppingCartService.getShoppingCart().getPositions().isEmpty())
             shoppingCartService.initTestData();
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
-        model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         return "view/ware/shopping_cart";
     }
 
     @RequestMapping(value="/shoppingCart", params={"removePos"})
-    public String removeShoppingCartPosition(final HttpServletRequest req) {
+    public String removeShoppingCartPosition(final HttpServletRequest req, @ModelAttribute ShoppingCart shoppingCart) {
         final Integer posNumber = Integer.valueOf(req.getParameter("removePos"));
         shoppingCartService.remove(posNumber);
         if(shoppingCartService.getShoppingCart().getPositions().isEmpty())
             return "view/general/home";
+        shoppingCartService.updateQuantity(shoppingCart);
         return "redirect:/shoppingCart";
     }
 

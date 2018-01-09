@@ -39,7 +39,7 @@
         </div>
         <div class="row justify-content-between mx-0 mt-3 mb-4">
             <button type="submit" formaction="/home" name="clearCart" class="btn btn-light"><i class="fas fa-eraser fa-2x" style="vertical-align: middle;"></i> Wyczyść koszyk</button>
-            <h4 id="totalCost" th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
+            <h4 id="totalCost" th:text="${'Suma: ' + #numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
         </div>
         <div class="row justify-content-between mx-0">
             <button type="submit" formaction="/home" name="continueShopping" class="btn btn-light"><i class="fas fa-angle-left fa-2x" style="vertical-align: middle;"></i> Kontynuuj zakupy</button>
