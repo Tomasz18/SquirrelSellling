@@ -10,6 +10,22 @@ import java.util.Set;
 @Table(name = "zamowienia")
 public class Order {
 
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Address getInvoiceBuyerAddress() {
+        return invoiceBuyerAddress;
+    }
+
+    public void setInvoiceBuyerAddress(Address invoiceBuyerAddress) {
+        this.invoiceBuyerAddress = invoiceBuyerAddress;
+    }
+
     public enum OrderStatus {
         submitted, rejected, waitingForRealization, sent, readyToCollect, realized, canceled
     }
@@ -36,7 +52,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "adresNabywcy", referencedColumnName = "id")
-    private Address byuerAddress;
+    private Address invoiceBuyerAddress;
 
     @Column(name = "numer", columnDefinition = "char(15)", nullable = false, unique = true)
     private String number;
