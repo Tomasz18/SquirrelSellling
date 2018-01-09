@@ -7,8 +7,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import spoonarchsystems.squirrelselling.Model.DAO.CustomerAccountDAO;
 import spoonarchsystems.squirrelselling.Model.DAO.OrderDAO;
+import spoonarchsystems.squirrelselling.Model.Entity.Order;
+import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.*;
 
 import java.text.SimpleDateFormat;
@@ -115,5 +116,14 @@ public class OrderServiceImpl implements OrderService {
             maxNumber = Collections.max(numbers);
         }
         return String.format("%04d", maxNumber + 1) + "/" + formattedDate;
+    }
+
+    @Override
+    public double getOrderValue(Order order) {
+        double orderValue = 0;
+        for (OrderPosition position : order.getPositions()) {
+            orderValue += position.getPrice() * position.getQuantity();
+        }
+        return orderValue;
     }
 }

@@ -29,10 +29,7 @@ public class ComplaintController {
         Order order = orderService.getOrder(orderId);
         Complaint complaint = complaintService.getComplaintForm(order);
 
-        double orderValue = 0;
-        for (OrderPosition position : order.getPositions()) {
-            orderValue += position.getPrice() * position.getQuantity();
-        }
+        double orderValue = orderService.getOrderValue(order);
 
         model.addAttribute("complaintForm", complaint);
         model.addAttribute("order", order);
@@ -46,10 +43,7 @@ public class ComplaintController {
         Set<Integer> errors = complaintService.validateComplaint(complaint,order);
 
         if (!errors.isEmpty()) {
-            double orderValue = 0;
-            for (OrderPosition position : order.getPositions()) {
-                orderValue += position.getPrice() * position.getQuantity();
-            }
+            double orderValue = orderService.getOrderValue(order);
 
             model.addAttribute("complaintForm", complaint);
             model.addAttribute("order", order);

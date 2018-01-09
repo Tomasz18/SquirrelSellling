@@ -6,4 +6,5 @@ public interface OrderService {
     Order getOrder(int id);
     boolean validateOrder(Order blueprint);
     boolean saveOrder(Order blueprint);
+    double getOrderValue(Order order);
 }

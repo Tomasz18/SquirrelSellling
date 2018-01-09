@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import spoonarchsystems.squirrelselling.Model.Entity.CustomerAccount;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
+import spoonarchsystems.squirrelselling.Model.Service.AccountService;
 import spoonarchsystems.squirrelselling.Model.Service.OrderService;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
+
+import java.util.ArrayList;
 
 
 @Controller
@@ -21,15 +25,15 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private ShoppingCartService shoppingCartService;
 
     @GetMapping("/order/{id}")
     public String showOrderDetails(@PathVariable int id, Model model) {
         Order order = orderService.getOrder(id);
-        double orderValue = 0;
-        for (OrderPosition position : order.getPositions()) {
-            orderValue += position.getPrice() * position.getQuantity();
-        }
+        double orderValue = orderService.getOrderValue(order);
 
         model.addAttribute("order", order);
         model.addAttribute("orderValue", orderValue);
@@ -42,6 +46,19 @@ public class OrderController {
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
         model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
         return "view/order/order_form";
+    }
+
+    @GetMapping("/orders")
+    public String showOrders(Model model) {
+        CustomerAccount customerAccount = accountService.getCurrentCustomer();
+        ArrayList<Double> ordersValues = new ArrayList<>();
+        for (Order order : customerAccount.getCustomer().getOrders()) {
+            ordersValues.add(orderService.getOrderValue(order));
+        }
+
+        model.addAttribute("orders", customerAccount.getCustomer().getOrders());
+        model.addAttribute("ordersValues", ordersValues);
+        return "view/order/order_list";
     }
 
     @GetMapping(value="/orderSummary")

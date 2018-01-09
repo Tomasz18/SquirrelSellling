@@ -7,7 +7,7 @@ import spoonarchsystems.squirrelselling.Model.Entity.CustomerAccount;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    static final int CURRENT_CUSTOMER_ID = 0;
+    static final int CURRENT_CUSTOMER_ID = 1;
 
     @Autowired
     private CustomerAccountDAO customerAccountDAO;
