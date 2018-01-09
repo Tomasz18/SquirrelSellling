@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Formularz reklamacji</title>
+    <link th:replace="view/general/fragments/resources::csss" />
+</head>
+<body>
+<div th:replace="view/general/fragments/header::header"></div>
+<div class="container-fluid content">
+    <div class="row justify-content-between">
+        <div class="col-2">
+            <div class="btn-group-vertical btn-group-sm" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-light text-left active">Wszytskie</button>
+                <button type="button" class="btn btn-light text-left">Złożone</button>
+                <button type="button" class="btn btn-light text-left">Oczekujące na realizację</button>
+                <button type="button" class="btn btn-light text-left">Wysłane</button>
+                <button type="button" class="btn btn-light text-left">Gotowe do odbioru</button>
+                <button type="button" class="btn btn-light text-left">Zrealizowane</button>
+                <button type="button" class="btn btn-light text-left">Anulowane</button>
+                <button type="button" class="btn btn-light text-left">Odrzucone</button>
+            </div>
+        </div>
+        <div class="col-10">
+            <a th:each="order, status : ${orders}" th:href="@{/order/} + ${order.id}" class="card mb-2 p-3 btn-card">
+                <div class="row justify-content-between">
+                    <div class="col-5">
+                        <h4 th:text="${order.number}"></h4>
+                    </div>
+                    <div class="col-2 text-right">
+                        <div th:text="${order.submissionDate}"></div>
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-5">
+                        <div th:text="${#numbers.formatDecimal(ordersValues[__${status.index}__], 1, 2) + ' zł'}"></div>
+                    </div>
+                    <div class="col-2 text-right">
+                        <th:block th:switch="${order.status}">
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).submitted}">Złożone</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).rejected}">Odrzucone</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).waitingForRealization}">Oczekujące na realizację</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).sent}">Wysłane</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).readyToCollect}">Gotowe do odbioru</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).realized}">Zrealizowane</div>
+                            <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).canceled}">Anulowane</div>
+                        </th:block>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<footer th:replace="view/general/fragments/footer::footer"></footer>
+<div th:replace="view/general/fragments/resources::scripts"></div>
+</body>
+</html>

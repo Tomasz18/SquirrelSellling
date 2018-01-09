@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="row justify-content-start ml-1 mt-4">
-                <div class="col-10">
+                <div th:if="${order.status == T(spoonarchsystems.squirrelselling.Model.Entity.Order.OrderStatus).realized}" class="col-10">
                     <form method="post" th:action="@{/complaintForm}">
                         <input type="hidden" th:field="${order.id}" />
                         <button type="submit" class="btn btn-outline-primary btn-block">Złoż reklamację</button>
