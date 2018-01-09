@@ -34,10 +34,28 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
+    public Order getOrderBlueprint(ShoppingCart shoppingCart) {
+        Order blueprint = new Order();
+        List<OrderPosition> positions = new ArrayList<>();
+        for(ShoppingCartPosition scp : shoppingCart.getPositions()) {
+            OrderPosition p = new OrderPosition();
+            p.setNumber(scp.getNumber());
+            p.setWare(scp.getWare());
+            p.setQuantity(scp.getQuantity());
+            p.setPrice(scp.getPrice());
+            p.setOrder(blueprint);
+        }
+        blueprint.setPositions(positions);
+        return blueprint;
+    }
+
+    @Override
     public boolean validateOrder(Order blueprint) {
         return validatePositions(blueprint) && validateShipmentAddress(blueprint);
     }
 
+    @Override
     public boolean saveOrder(Order order) {
         Date submissionDate = new Date();
         order.setSubmissionDate(submissionDate);

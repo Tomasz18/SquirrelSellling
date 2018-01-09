@@ -12,6 +12,9 @@ import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
 import spoonarchsystems.squirrelselling.Model.Service.OrderService;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
+import spoonarchsystems.squirrelselling.Utils.DateWrapper;
+
+import java.util.Calendar;
 
 
 @Controller
@@ -40,12 +43,18 @@ public class OrderController {
     public String placeOrder(@ModelAttribute ShoppingCart shoppingCart, Model model) {
         shoppingCartService.updateQuantity(shoppingCart);
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
-        model.addAttribute("shoppingCartSum", shoppingCartService.getSum());
+        model.addAttribute("orderBlueprint", orderService.getOrderBlueprint(shoppingCartService.getShoppingCart()));
+        model.addAttribute("postponementDateWrapper", new DateWrapper());
         return "view/order/order_form";
     }
 
-    @GetMapping(value="/orderSummary")
-    public String orderSummary() {
+    @PostMapping(value="/orderSummary")
+    public String orderSummary(@ModelAttribute Order order, @ModelAttribute DateWrapper postponementDateWrapper) {
+        System.out.println("##### DeliveryAddress:" + order.getDeliveryAddress().getStreet() + " " + order.getDeliveryAddress().getBuildingNumber() + "/" + order.getDeliveryAddress().getLocalNumber());
+        System.out.println("#####                 " + order.getDeliveryAddress().getCity() + " " + order.getDeliveryAddress().getPostalCode());
+        System.out.println("##### InvoiceAddress:" + order.getInvoiceBuyerAddress().getStreet() + " " + order.getInvoiceBuyerAddress().getBuildingNumber() + "/" + order.getInvoiceBuyerAddress().getLocalNumber());
+        System.out.println("#####                 " + order.getInvoiceBuyerAddress().getCity() + " " + order.getInvoiceBuyerAddress().getPostalCode());
+        System.out.println("##### PostponementDate: " + postponementDateWrapper.getDate());
         return "view/order/order_summary";
     }
 }

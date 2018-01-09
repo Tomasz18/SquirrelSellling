@@ -19,9 +19,9 @@ $(document).ready(function(){
 });
 
 $(document).ready(function() {
-   var module = {checkboxName: 'postponement', container1Id: 'postponementNo', container2Id: 'postponementYes'};
+   var module = {checkboxName: 'postponement', container1Id: 'postponementYes', container2Id: 'postponementNo'};
 
-   $('input[type=checkbox][name=' + module.checkboxName + ']').first().prop('checked', true);
+   $('input[type=checkbox][name=' + module.checkboxName + ']').first().prop('checked', false);
    $("#" + module.container1Id).hide();
    $('input[type=checkbox][name=' + module.checkboxName + ']').change(generate_handler(module));
 
