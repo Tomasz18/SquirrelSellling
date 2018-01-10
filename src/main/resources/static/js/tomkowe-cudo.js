@@ -1,7 +1,7 @@
 $(document).ready(function(){
     var modules = [
-        {radioName: 'pickup', container1Id: 'selfPickup', container2Id: 'shipping'},
-        {radioName: 'bill', container1Id: 'receipt', container2Id: 'invoice'}
+        {radioName: 'personalCollection', container1Id: 'selfPickup', container2Id: 'shippingContainer'},
+        {radioName: 'invoice', container1Id: 'receipt', container2Id: 'invoiceContainer'}
     ];
  
     for (var i = 0; i < modules.length; i++) {
@@ -19,11 +19,11 @@ $(document).ready(function(){
 });
 
 $(document).ready(function() {
-   var module = {checkboxName: 'postponement', container1Id: 'postponementYes', container2Id: 'postponementNo'};
+   var module = {checkboxId: 'postponementCheckbox', container1Id: 'postponementYes', container2Id: 'postponementNo'};
 
-   $('input[type=checkbox][name=' + module.checkboxName + ']').first().prop('checked', false);
+   $('input[type=checkbox][id=' + module.checkboxId + ']').first().prop('checked', false);
    $("#" + module.container1Id).hide();
-   $('input[type=checkbox][name=' + module.checkboxName + ']').change(generate_handler(module));
+   $('input[type=checkbox][id=' + module.checkboxId + ']').change(generate_handler(module));
 
 
     function generate_handler(module) {

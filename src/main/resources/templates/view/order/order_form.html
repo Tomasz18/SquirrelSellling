@@ -18,11 +18,11 @@
             <div class="col-3">
                 <div class="row mx-0 my-2">
                     <div>
-                        <input type="radio" name="pickup" id="selfPickupRadio" checked="checked"/>
+                        <input type="radio" name="personalCollection" id="selfPickupRadio" checked="checked" th:field="${orderBlueprint.personalCollection}" th:value="true"/>
                         <label for="selfPickupRadio">Odbiór osobisty</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="pickup" id="shippingRadio" />
+                        <input type="radio" name="personalCollection" id="shippingRadio" />
                         <label for="shippingRadio">Dostawa</label>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         <p>ul. Balsamiczna 99<br/>50-518<br/>Wrocław</p>
                     </div>
                 </div>
-                <div class="row mx-0 my-3" id="shipping">
+                <div class="row mx-0 my-3" id="shippingContainer">
                     <div class="col-10 px-0 my-1">
                         <input type="text" id="shippingStreetInput" class="form-control" placeholder="Wpisz ulicę" th:field="${orderBlueprint.deliveryAddress.street}"/>
                     </div>
@@ -61,16 +61,16 @@
                     <h6>Wybierz rodzaj rachunku</h6>
                     <div class="w-100"></div>
                     <div>
-                        <input type="radio" name="bill" id="receiptRadio" checked="checked"/>
+                        <input type="radio" name="invoice" id="receiptRadio" checked="checked"/>
                         <label for="receiptRadio">Paragon</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="bill" id="invoiceRadio"/>
+                        <input type="radio" name="invoice" id="invoiceRadio" th:field="${orderBlueprint.invoice}" th:value="false"/>
                         <label for="invoiceRadio">Faktura</label>
                     </div>
                 </div>
                 <div id="receipt"></div>
-                <div class="row mx-0" id="invoice">
+                <div class="row mx-0" id="invoiceContainer">
                     <div class="col-10 px-0 my-1">
                         <input type="text" id="invoiceStreetInput" class="form-control" placeholder="Wpisz ulicę" th:field="${orderBlueprint.invoiceBuyerAddress.street}"/>
                     </div>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="row mx-0 my-3">
                     <div>
-                        <input type="checkbox" name="postponement" id="postponementCheckbox" th:checked="false"/>
+                        <input type="checkbox" name="postponement" id="postponementCheckbox" th:checked="false" th:field="${postponement.value}"/>
                         <label for="postponementCheckbox">Zamówienie odroczone</label>
                     </div>
                     <div class="w-100"></div>
@@ -132,6 +132,9 @@
                     <h4 th:text="${'Suma: ' + #numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
                 </div>
             </div>
+        </div>
+        <div class="row mb-0 mt-5 justify-content-center" th:each="msg : ${@orderServiceImpl.errors}">
+            <div class="col-md-auto"><p class="text-danger" th:text="${msg}"></p></div>
         </div>
         <div class="row mb-0 mt-5">
             <div class="col-6">

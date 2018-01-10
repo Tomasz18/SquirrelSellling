@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
+import spoonarchsystems.squirrelselling.Model.Service.AccountService;
 import spoonarchsystems.squirrelselling.Model.Service.OrderService;
 import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
+import spoonarchsystems.squirrelselling.Utils.BooleanWrapper;
 import spoonarchsystems.squirrelselling.Utils.DateWrapper;
 
 import java.util.Calendar;
@@ -25,6 +27,9 @@ public class OrderController {
 
     @Autowired
     private ShoppingCartService shoppingCartService;
+
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/order/{id}")
     public String showOrderDetails(@PathVariable int id, Model model) {
@@ -41,20 +46,29 @@ public class OrderController {
 
     @PostMapping(value="/orderForm")
     public String placeOrder(@ModelAttribute ShoppingCart shoppingCart, Model model) {
-        shoppingCartService.updateQuantity(shoppingCart);
+        if(shoppingCart != null && shoppingCart.getPositions() != null && !shoppingCart.getPositions().isEmpty()) {
+            shoppingCartService.updateQuantity(shoppingCart);
+        }
         model.addAttribute("shoppingCart", shoppingCartService.getShoppingCart());
         model.addAttribute("orderBlueprint", orderService.getOrderBlueprint(shoppingCartService.getShoppingCart()));
+        BooleanWrapper postponementWrapper = new BooleanWrapper();
+        postponementWrapper.setValue(false);
+        model.addAttribute("postponement", postponementWrapper);
         model.addAttribute("postponementDateWrapper", new DateWrapper());
         return "view/order/order_form";
     }
 
     @PostMapping(value="/orderSummary")
-    public String orderSummary(@ModelAttribute Order order, @ModelAttribute DateWrapper postponementDateWrapper) {
-        System.out.println("##### DeliveryAddress:" + order.getDeliveryAddress().getStreet() + " " + order.getDeliveryAddress().getBuildingNumber() + "/" + order.getDeliveryAddress().getLocalNumber());
-        System.out.println("#####                 " + order.getDeliveryAddress().getCity() + " " + order.getDeliveryAddress().getPostalCode());
-        System.out.println("##### InvoiceAddress:" + order.getInvoiceBuyerAddress().getStreet() + " " + order.getInvoiceBuyerAddress().getBuildingNumber() + "/" + order.getInvoiceBuyerAddress().getLocalNumber());
-        System.out.println("#####                 " + order.getInvoiceBuyerAddress().getCity() + " " + order.getInvoiceBuyerAddress().getPostalCode());
-        System.out.println("##### PostponementDate: " + postponementDateWrapper.getDate());
+    public String orderSummary(@ModelAttribute Order blueprint, @ModelAttribute DateWrapper postponementDateWrapper, @ModelAttribute BooleanWrapper postponementBooleanWrapper) {
+        orderService.setOrderPositions(blueprint, shoppingCartService.getShoppingCart());
+
+        if(!orderService.validateOrder(blueprint)) {
+            return "forward:/orderForm";
+        }
+        if(postponementBooleanWrapper.getValue())
+            if(!orderService.setPostponement(blueprint, postponementDateWrapper.getDate()))
+                return "forward:/orderForm";
+
         return "view/order/order_summary";
     }
 }

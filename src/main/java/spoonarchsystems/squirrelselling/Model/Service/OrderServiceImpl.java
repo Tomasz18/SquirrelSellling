@@ -7,19 +7,27 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import spoonarchsystems.squirrelselling.Model.DAO.CustomerAccountDAO;
 import spoonarchsystems.squirrelselling.Model.DAO.OrderDAO;
 import spoonarchsystems.squirrelselling.Model.Entity.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderServiceImpl implements OrderService {
+
+    private static final String EMPTY_DELIVERY_ADDRESS = "Nie określono adresu dostawy! Uzupełnij pola.";
+    private static final String EMPTY_INVOICE_ADDRESS = "Nie określono adresu nabywcy dla faktury! Uzupełnij pola.";
+    private static final String EMPTY_POSTPONEMENT_DATE = "Nie określono daty odroczenia! Uzupełnij pole.";
+    private static final String INVALID_POSTPONEMENT_DATE = "Wprowadzono niepoprawną datę odroczenia! Musi mieścić się w zakresie 7 - 30 dni licząc od dnia dzisiejszego.";
+    private static final String INVALID_SHOPPING_CART = "Wystąpił błąd z koszykiem! Sprawdź, czy dodałeś towary do koszyka przed złożeniem zamówienia.";
+    private static final String SAVE_ERROR = "Wystąpił błąd przy zapisie zamówienia! Proszę, spróbuj złożyć je ponownie, a jeśli błąd będzie nadal występował, skontaktuj się z obsługą hurtowni.";
+
+    private List<String> errors = new ArrayList<>();
+
+    private Order order;
 
     @Autowired
     private OrderDAO orderDAO;
@@ -37,6 +45,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderBlueprint(ShoppingCart shoppingCart) {
         Order blueprint = new Order();
+        setOrderPositions(blueprint, shoppingCart);
+        blueprint.setPersonalCollection(true);
+        blueprint.setInvoice(false);
+        return blueprint;
+    }
+
+    @Override
+    public void setOrderPositions(Order blueprint, ShoppingCart shoppingCart) {
         List<OrderPosition> positions = new ArrayList<>();
         for(ShoppingCartPosition scp : shoppingCart.getPositions()) {
             OrderPosition p = new OrderPosition();
@@ -45,14 +61,55 @@ public class OrderServiceImpl implements OrderService {
             p.setQuantity(scp.getQuantity());
             p.setPrice(scp.getPrice());
             p.setOrder(blueprint);
+            positions.add(p);
         }
         blueprint.setPositions(positions);
-        return blueprint;
     }
 
     @Override
     public boolean validateOrder(Order blueprint) {
+        errors.clear();
         return validatePositions(blueprint) && validateShipmentAddress(blueprint);
+    }
+
+    @Override
+    public boolean setPostponement(Order blueprint, Date date) {
+        if(date == null) {
+            errors.add(EMPTY_POSTPONEMENT_DATE);
+            return false;
+        }
+        int days = calculatePostponement(date);
+        if(days < 7 || days > 30) {
+            errors.add(INVALID_POSTPONEMENT_DATE);
+            return false;
+        }
+        errors.clear();
+        blueprint.setPostponementTime(days);
+        return true;
+    }
+
+    @Override
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    @Override
+    public void prepareOrder(Order blueprint) {
+        order = new Order();
+
+        order.setPositions(blueprint.getPositions());
+
+        order.setInvoice(blueprint.getInvoice());
+        if(order.getInvoice())
+            order.setInvoiceBuyerAddress(blueprint.getInvoiceBuyerAddress());
+
+        order.setPersonalCollection(blueprint.getPersonalCollection());
+        if(!order.getPersonalCollection())
+            order.setDeliveryAddress(blueprint.getDeliveryAddress());
+
+        order.setPostponementTime(blueprint.getPostponementTime());
+
+        order.setDeliveryCost(calculateDeliveryCost(blueprint.getPositions()));
     }
 
     @Override
@@ -87,36 +144,56 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private boolean validatePositions(Order blueprint) {
-        if(blueprint.getPositions() == null || blueprint.getPositions().size() == 0)
+        if(blueprint.getPositions() == null || blueprint.getPositions().size() == 0) {
+            errors.add(INVALID_SHOPPING_CART);
             return false;
+        }
         for(OrderPosition op : blueprint.getPositions()) {
             if(op.getQuantity() == null || op.getQuantity() == 0)
                 return false;
             if(op.getWare() != null) {
                 Ware ware = op.getWare();
-                Double validPrice = op.getQuantity() * (op.getQuantity() < op.getWare().getWholesaleThreshold() ? op.getWare().getRetailPrice() : op.getWare().getWholesalePrice());
-                if(op.getPrice() != validPrice)
+                Double validPrice = op.getQuantity() * (op.getQuantity() < ware.getWholesaleThreshold() ? ware.getRetailPrice() : ware.getWholesalePrice());
+                if(!op.getPrice().equals(validPrice)) {
+                    errors.add(INVALID_SHOPPING_CART);
                     return false;
+                }
             }
-            else
+            else {
+                errors.add(INVALID_SHOPPING_CART);
                 return false;
+            }
         }
         return true;
     }
 
     private boolean validateShipmentAddress(Order blueprint) {
         Address shipmentAddress = blueprint.getDeliveryAddress();
-        if(shipmentAddress == null && !blueprint.isPersonalCollection())
-            return false;
-        if(shipmentAddress != null) {
-            if(shipmentAddress.getCity() == null || shipmentAddress.getCity() == "")
+        if(!blueprint.getPersonalCollection()) {
+            if(shipmentAddress == null) {
+                errors.add(EMPTY_DELIVERY_ADDRESS);
                 return false;
-            if(shipmentAddress.getBuildingNumber() == null || shipmentAddress.getBuildingNumber() == "")
+            }
+            if(shipmentAddress.getCity() == null || shipmentAddress.getCity().isEmpty()) {
+                errors.add(EMPTY_DELIVERY_ADDRESS);
                 return false;
-            if(shipmentAddress.getPostalCode() == null || shipmentAddress.getPostalCode() == "")
+            }
+            if(shipmentAddress.getBuildingNumber() == null || shipmentAddress.getBuildingNumber().isEmpty()) {
+                errors.add(EMPTY_DELIVERY_ADDRESS);
                 return false;
+            }
+            if(shipmentAddress.getPostalCode() == null || shipmentAddress.getPostalCode().isEmpty()) {
+                errors.add(EMPTY_DELIVERY_ADDRESS);
+                return false;
+            }
         }
         return true;
+    }
+
+    private int calculatePostponement(Date date) {
+        Date now = new Date();
+        long diff = date.getTime() - now.getTime();
+        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     private String getNextOrderNumber(Date date) {

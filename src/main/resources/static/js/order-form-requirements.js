@@ -16,8 +16,6 @@ $(document).ready(function() {
             $("#shippingBuildingInput").prop('required', shipping);
             $("#shippingCityInput").prop('required', shipping);
             $("#shippingPostalCodeInput").prop('required', shipping);
-            console.log("shippingUpdate");
-            console.log(shipping);
         }
     }
     function invoiceUpdate() {
@@ -27,16 +25,12 @@ $(document).ready(function() {
             $("#invoiceBuildingInput").prop('required', invoice);
             $("#invoiceCityInput").prop('required', invoice);
             $("#invoicePostalCodeInput").prop('required', invoice);
-            console.log("invoiceUpdate");
-            console.log(invoice);
         }
     }
     function postponementUpdate() {
         return function () {
             var postponement = $("#postponementCheckbox").is(':checked');
             $("#postponementDateInput").prop('required', postponement);
-            console.log("postponementUpdate");
-            console.log(postponement);
         }
     }
 });
