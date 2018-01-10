@@ -102,7 +102,10 @@
                             późniejszy licząc od daty bieżącej</i>
                     </div>
                     <div class="col-8 mx-0" id="postponementYes">
-                        <input type="date" id="postponementDateInput" class="form-control" th:field="${postponementDateWrapper.date}"/>
+                        <input type="date" id="postponementDateInput" class="form-control" th:field="${postponementDateWrapper.date}"
+                               th:with="today = ${#dates.createToday()}, year = ${#dates.year(today)}, month = ${#dates.month(today)}, day = ${#dates.day(today)}"
+                               th:max="${#dates.format(#dates.create(year, month, day + 30), 'yyyy-MM-dd')}"
+                               th:min="${#dates.format(#dates.create(year, month, day + 7), 'yyyy-MM-dd')}"/>
                         Wybierz oczekiwaną datę dostarczenia zamówienia
                     </div>
                 </div>
