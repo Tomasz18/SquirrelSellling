@@ -10,22 +10,6 @@ import java.util.Set;
 @Table(name = "zamowienia")
 public class Order {
 
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public Address getInvoiceBuyerAddress() {
-        return invoiceBuyerAddress;
-    }
-
-    public void setInvoiceBuyerAddress(Address invoiceBuyerAddress) {
-        this.invoiceBuyerAddress = invoiceBuyerAddress;
-    }
-
     public enum OrderStatus {
         submitted, rejected, waitingForRealization, sent, readyToCollect, realized, canceled
     }
@@ -87,6 +71,9 @@ public class Order {
 
     @Column(name = "odbiorOsobisty", nullable = false)
     private Boolean personalCollection;
+
+    @Column(name = "faktura", nullable = false)
+    private Boolean invoice;
 
     @Column(name = "kosztDostawy", nullable = false)
     private Double deliveryCost;
@@ -191,7 +178,7 @@ public class Order {
         this.deliveryTime = deliveryTime;
     }
 
-    public Boolean isPersonalCollection() {
+    public Boolean getPersonalCollection() {
         return personalCollection;
     }
 
@@ -221,5 +208,29 @@ public class Order {
 
     public void setComplaints(Set<Complaint> complaints) {
         this.complaints = complaints;
+    }
+
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Address getInvoiceBuyerAddress() {
+        return invoiceBuyerAddress;
+    }
+
+    public void setInvoiceBuyerAddress(Address invoiceBuyerAddress) {
+        this.invoiceBuyerAddress = invoiceBuyerAddress;
+    }
+
+    public Boolean getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Boolean invoice) {
+        this.invoice = invoice;
     }
 }

@@ -13,16 +13,16 @@
         <div class="col-6"><h3>Dane do zamówienia</h3></div>
         <div class="col-6"><h3>Zawartość zamówienia</h3></div>
     </div>
-    <form th:action="post">
+    <form method="post">
         <div class="row mx-0">
             <div class="col-3">
                 <div class="row mx-0 my-2">
                     <div>
-                        <input type="radio" name="pickup" id="selfPickupRadio" checked="checked"/>
+                        <input type="radio" name="personalCollection" id="selfPickupRadio" checked="checked" th:field="${orderBlueprint.personalCollection}" th:value="true"/>
                         <label for="selfPickupRadio">Odbiór osobisty</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="pickup" id="shippingRadio" />
+                        <input type="radio" name="personalCollection" id="shippingRadio" />
                         <label for="shippingRadio">Dostawa</label>
                     </div>
                 </div>
@@ -33,24 +33,24 @@
                         <p>ul. Balsamiczna 99<br/>50-518<br/>Wrocław</p>
                     </div>
                 </div>
-                <div class="row mx-0 my-3" id="shipping">
+                <div class="row mx-0 my-3" id="shippingContainer">
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
+                        <input type="text" id="shippingStreetInput" class="form-control" placeholder="Wpisz ulicę" th:field="${orderBlueprint.deliveryAddress.street}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-5 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Nr budynku"/>
+                        <input type="text" id="shippingBuildingInput" class="form-control" placeholder="Nr budynku" th:field="${orderBlueprint.deliveryAddress.buildingNumber}"/>
                     </div>
                     <div class="col-5 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Nr lokalu"/>
+                        <input type="text" id="shippingLocalInput" class="form-control" placeholder="Nr lokalu" th:field="${orderBlueprint.deliveryAddress.localNumber}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz miasto"/>
+                        <input type="text" id="shippingCityInput" class="form-control" placeholder="Wpisz miasto" th:field="${orderBlueprint.deliveryAddress.city}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
+                        <input type="text" id="shippingPostalCodeInput" class="form-control" placeholder="Wpisz kod pocztowy" th:field="${orderBlueprint.deliveryAddress.postalCode}"/>
                     </div>
                     <div class="col-5 px-0 mt-4"><h6>Forma dostawy:</h6></div>
                     <div class="col-5 px-0 mt-4 text-right"><h6>Kurier DPD</h6></div>
@@ -61,38 +61,38 @@
                     <h6>Wybierz rodzaj rachunku</h6>
                     <div class="w-100"></div>
                     <div>
-                        <input type="radio" name="bill" id="receiptRadio" checked="checked"/>
+                        <input type="radio" name="invoice" id="receiptRadio" checked="checked"/>
                         <label for="receiptRadio">Paragon</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="bill" id="invoiceRadio"/>
+                        <input type="radio" name="invoice" id="invoiceRadio" th:field="${orderBlueprint.invoice}" th:value="false"/>
                         <label for="invoiceRadio">Faktura</label>
                     </div>
                 </div>
                 <div id="receipt"></div>
-                <div class="row mx-0" id="invoice">
+                <div class="row mx-0" id="invoiceContainer">
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz ulicę"/>
+                        <input type="text" id="invoiceStreetInput" class="form-control" placeholder="Wpisz ulicę" th:field="${orderBlueprint.invoiceBuyerAddress.street}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-5 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Nr budynku"/>
+                        <input type="text" id="invoiceBuildingInput" class="form-control" placeholder="Nr budynku" th:field="${orderBlueprint.invoiceBuyerAddress.buildingNumber}"/>
                     </div>
                     <div class="col-5 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Nr lokalu"/>
+                        <input type="text" id="invoiceLocalInput" class="form-control" placeholder="Nr lokalu" th:field="${orderBlueprint.invoiceBuyerAddress.localNumber}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz miasto"/>
+                        <input type="text" id="invoiceCityInput" class="form-control" placeholder="Wpisz miasto" th:field="${orderBlueprint.invoiceBuyerAddress.city}"/>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-10 px-0 my-1">
-                        <input type="text" class="form-control" placeholder="Wpisz kod pocztowy"/>
+                        <input type="text" id="invoicePostalCodeInput" class="form-control" placeholder="Wpisz kod pocztowy" th:field="${orderBlueprint.invoiceBuyerAddress.postalCode}"/>
                     </div>
                 </div>
                 <div class="row mx-0 my-3">
                     <div>
-                        <input type="checkbox" name="postponement" id="postponementCheckbox" th:checked="false"/>
+                        <input type="checkbox" name="postponement" id="postponementCheckbox" th:checked="false" th:field="${postponement.value}"/>
                         <label for="postponementCheckbox">Zamówienie odroczone</label>
                     </div>
                     <div class="w-100"></div>
@@ -102,7 +102,7 @@
                             późniejszy licząc od daty bieżącej</i>
                     </div>
                     <div class="col-8 mx-0" id="postponementYes">
-                        <input type="date" class="form-control"/>
+                        <input type="date" id="postponementDateInput" class="form-control" th:field="${postponementDateWrapper.date}"/>
                         Wybierz oczekiwaną datę dostarczenia zamówienia
                     </div>
                 </div>
@@ -129,9 +129,12 @@
                     </div>
                 </div>
                 <div class="col text-right">
-                    <h4 th:text="${'Suma: ' + #numbers.formatDecimal(shoppingCartSum, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
+                    <h4 th:text="${'Suma: ' + #numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h4>
                 </div>
             </div>
+        </div>
+        <div class="row mb-0 mt-5 justify-content-center" th:each="msg : ${@orderServiceImpl.errors}">
+            <div class="col-md-auto"><p class="text-danger" th:text="${msg}"></p></div>
         </div>
         <div class="row mb-0 mt-5">
             <div class="col-6">
@@ -147,5 +150,6 @@
 <!--Bootstrap JS-->
 <div th:replace="view/general/fragments/resources :: scripts"></div>
 <script th:src="@{/js/tomkowe-cudo.js}"></script>
+<script th:src="@{/js/order-form-requirements.js}"></script>
 </body>
 </html>
