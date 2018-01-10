@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Potwierdzenie złożenia zamówienia</title>
+    <link th:replace="view/general/fragments/resources::csss" />
+</head>
+<body>
+<div th:replace="view/general/fragments/header::header"></div>
+<div class="container-fluid content">
+    <h2>Zamówienie zostało złożone</h2>
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    Dziękujemy za złożenie zamówienia w naszej hurtowni!
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-3">
+                    Niebawem otrzymasz wiadomość email ze szczegółami zamówienia.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-3">
+                    Jesteśmy zaszczyceni mogąc dostarczyć dla Ciebie Twoje ulubione produkty. <br />
+                    Mamy nadzieję, że będziesz częściej nas odwiedzać :)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-3 text-right">
+                    Zespół Hurtowni Towarów <br />
+                    "Chyży Jednorożec"
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <i class="far fa-smile fa-6x"></i>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-5 text-right">
+                    <i class="far fa-smile fa-6x"></i>
+                </div>
+                <div class="col-5 text-left">
+                    <i class="far fa-smile fa-6x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a th:href="@{/orders}" class="btn btn-light image-button mt-5 mb-3" role="button"><i class="fas fa-angle-left fa-2x"></i><span class="ml-2">Moje zamówienia</span></a>
+</div>
+<footer th:replace="view/general/fragments/footer::footer"></footer>
+<div th:replace="view/general/fragments/resources::scripts"></div>
+</body>
+</html>
