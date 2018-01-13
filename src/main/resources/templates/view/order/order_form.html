@@ -22,7 +22,7 @@
                         <label for="selfPickupRadio">Odbiór osobisty</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="personalCollection" id="shippingRadio" />
+                        <input type="radio" name="personalCollection" id="shippingRadio" th:field="${orderBlueprint.personalCollection}" th:value="false"/>
                         <label for="shippingRadio">Dostawa</label>
                     </div>
                 </div>
@@ -61,11 +61,11 @@
                     <h6>Wybierz rodzaj rachunku</h6>
                     <div class="w-100"></div>
                     <div>
-                        <input type="radio" name="invoice" id="receiptRadio" checked="checked"/>
+                        <input type="radio" name="invoice" id="receiptRadio" checked="checked" th:field="${orderBlueprint.invoice}" th:value="false"/>
                         <label for="receiptRadio">Paragon</label>
                     </div>
                     <div class="ml-4">
-                        <input type="radio" name="invoice" id="invoiceRadio" th:field="${orderBlueprint.invoice}" th:value="false"/>
+                        <input type="radio" name="invoice" id="invoiceRadio" th:field="${orderBlueprint.invoice}" th:value="true"/>
                         <label for="invoiceRadio">Faktura</label>
                     </div>
                 </div>

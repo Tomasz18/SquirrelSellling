@@ -80,13 +80,21 @@ public class OrderServiceImpl implements OrderService {
             errors.add(EMPTY_POSTPONEMENT_DATE);
             return false;
         }
-        int days = calculatePostponement(date);
+        int days = calculatePostponement(date) + 1;
         if(days < 7 || days > 30) {
             errors.add(INVALID_POSTPONEMENT_DATE);
             return false;
         }
         errors.clear();
         blueprint.setPostponementTime(days);
+        return true;
+    }
+
+    @Override
+    public boolean setPostponement(Order blueprint, Integer value) {
+        if(value < 0)
+            return false;
+        blueprint.setPostponementTime(value);
         return true;
     }
 

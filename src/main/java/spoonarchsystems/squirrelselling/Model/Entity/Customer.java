@@ -10,6 +10,8 @@ import java.util.List;
 @Table(name = "klienci")
 public class Customer implements Serializable{
 
+    public enum CustomerType { I, P }
+
     @Id
     @Column(name = "id")
     private int id;
@@ -34,7 +36,8 @@ public class Customer implements Serializable{
     private String phone;
 
     @Column(name = "typKlienta", nullable = false, length = 1)
-    private Character customerType;
+    @Enumerated(EnumType.STRING)
+    private CustomerType customerType;
 
     public int getId() {
         return id;
@@ -76,11 +79,11 @@ public class Customer implements Serializable{
         this.phone = phone;
     }
 
-    public Character getCustomerType() {
+    public CustomerType getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(Character customerType) {
+    public void setCustomerType(CustomerType customerType) {
         this.customerType = customerType;
     }
 

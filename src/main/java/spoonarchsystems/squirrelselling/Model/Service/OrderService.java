@@ -12,6 +12,7 @@ public interface OrderService {
     void setOrderPositions(Order blueprint, ShoppingCart shoppingCart);
     boolean validateOrder(Order blueprint);
     boolean setPostponement(Order blueprint, Date date);
+    boolean setPostponement(Order blueprint, Integer value);
     List<String> getErrors();
     void prepareOrder(Order blueprint);
     boolean saveOrder(Order blueprint);

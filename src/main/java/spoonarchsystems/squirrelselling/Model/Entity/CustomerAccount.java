@@ -27,7 +27,8 @@ public class CustomerAccount {
     private String email;
 
     @Column(name = "typKlienta", length = 1, nullable = false)
-    private Character customerType;
+    @Enumerated(EnumType.STRING)
+    private Customer.CustomerType customerType;
 
     public int getId() {
         return id;
@@ -77,11 +78,11 @@ public class CustomerAccount {
         this.email = email;
     }
 
-    public Character getCustomerType() {
+    public Customer.CustomerType getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(Character customerType) {
+    public void setCustomerType(Customer.CustomerType customerType) {
         this.customerType = customerType;
     }
 }
