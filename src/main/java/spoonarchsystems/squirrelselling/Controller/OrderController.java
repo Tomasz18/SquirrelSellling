@@ -41,6 +41,19 @@ public class OrderController {
         return "view/order/order_details";
     }
 
+    @GetMapping("/orders")
+    public String showOrders(Model model) {
+        CustomerAccount customerAccount = accountService.getCurrentCustomer();
+        ArrayList<Double> ordersValues = new ArrayList<>();
+        for (Order order : customerAccount.getCustomer().getOrders()) {
+            ordersValues.add(orderService.getOrderValue(order));
+        }
+
+        model.addAttribute("orders", customerAccount.getCustomer().getOrders());
+        model.addAttribute("ordersValues", ordersValues);
+        return "view/order/order_list";
+    }
+
     @PostMapping(value="/orderForm")
     public String placeOrder(@ModelAttribute ShoppingCart shoppingCart, Model model) {
         if(shoppingCart != null && shoppingCart.getPositions() != null && !shoppingCart.getPositions().isEmpty()) {
@@ -55,19 +68,6 @@ public class OrderController {
         return "view/order/order_form";
     }
 
-    @GetMapping("/orders")
-    public String showOrders(Model model) {
-        CustomerAccount customerAccount = accountService.getCurrentCustomer();
-        ArrayList<Double> ordersValues = new ArrayList<>();
-        for (Order order : customerAccount.getCustomer().getOrders()) {
-            ordersValues.add(orderService.getOrderValue(order));
-        }
-
-        model.addAttribute("orders", customerAccount.getCustomer().getOrders());
-        model.addAttribute("ordersValues", ordersValues);
-        return "view/order/order_list";
-    }
-
     @PostMapping(value="/orderSummary")
     public String orderSummary(@ModelAttribute Order blueprint, @ModelAttribute DateWrapper postponementDateWrapper, @ModelAttribute BooleanWrapper postponementBooleanWrapper, Model model) {
         orderService.setOrderPositions(blueprint, shoppingCartService.getShoppingCart());
@@ -75,8 +75,6 @@ public class OrderController {
         if(!orderService.validateOrder(blueprint)) {
             return "forward:/orderForm";
         }
-
-        System.out.println("##### postponementBoolean: " + postponementBooleanWrapper.getValue());
 
         if(postponementBooleanWrapper.getValue()) {
             if (!orderService.setPostponement(blueprint, postponementDateWrapper.getDate()))
@@ -88,11 +86,19 @@ public class OrderController {
         model.addAttribute("orderBlueprint", blueprint);
         model.addAttribute("customer", accountService.getCurrentCustomer().getCustomer());
 
+        orderService.prepareOrder(blueprint);
+
         return "view/order/order_summary";
     }
 
     @PostMapping(value="/orderConfirmation")
     public String orderConfirmation() {
+        Order order = orderService.getPreparedOrder();
+        if(orderService.saveOrder(order)) {
+            System.out.println("##### SAVED :)");
+        }
+        else
+            System.out.println("##### OOPS...");
         return "view/order/order_confirmation";
     }
 }

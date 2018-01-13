@@ -22,13 +22,13 @@
                         <p class="mb-0" th:text="${'REGON: ' + customer.businessCustomer.regon}">REGON: 732065814</p>
                         <p class="mb-0" th:text="${customer.businessCustomer.ownerName + ' ' + customer.businessCustomer.ownerSurname}">Imię Nazwisko</p>
                         <p class="mb-0" th:text="${customer.email}">adres@email.com</p>
-                        <p class="mb-0" th:text="${customer.number}">tel. 123 456 789</p>
+                        <p class="mb-0" th:text="${'tel. ' + customer.phone}">tel. 123 456 789</p>
                     </div>
                     <div th:case="${T(spoonarchsystems.squirrelselling.Model.Entity.Customer.CustomerType).I}">
                         <h6 class="my-3">Klient idywidualny</h6>
                         <p class="mb-0" th:text="${customer.individualCustomer.name + ' ' + customer.individualCustomer.surname}">Imię Nazwisko</p>
                         <p class="mb-0" th:text="${customer.email}">adres@email.com</p>
-                        <p class="mb-0" th:text="${customer.number}">tel. 123 456 789</p>
+                        <p class="mb-0" th:text="${'tel. ' + customer.phone}">tel. 123 456 789</p>
                     </div>
                 </th:block>
             </div>
@@ -54,6 +54,7 @@
                 </div>
                 <h6 class="my-3">Rodzaj rachunku</h6>
                 <div th:if="${orderBlueprint.invoice}">
+                    <p class="mb-1">Faktura na adres:</p>
                     <p th:if="${orderBlueprint.invoiceBuyerAddress.localNumber == null}" class="mb-0" th:text="${orderBlueprint.invoiceBuyerAddress.street + ' ' + orderBlueprint.invoiceBuyerAddress.buildingNumber}"></p>
                     <p th:if="${orderBlueprint.invoiceBuyerAddress.localNumber != null}" class="mb-0" th:text="${orderBlueprint.invoiceBuyerAddress.street + ' ' + orderBlueprint.invoiceBuyerAddress.buildingNumber + '/' + orderBlueprint.invoiceBuyerAddress.localNumber}"></p>
                     <p class="mb-0" th:text="${orderBlueprint.invoiceBuyerAddress.postalCode}"></p>
@@ -68,30 +69,34 @@
                 <div class="row mx-0 my-3">
                     <div class="col">
                         <h6>Produkt</h6>
-                        <div th:each="cp, status : ${@shoppingCartServiceImpl.getShoppingCart().positions}">
-                            <p th:text="${cp.ware.name}"></p>
+                        <div th:each="p : ${orderBlueprint.positions}">
+                            <p th:text="${p.ware.name}"></p>
                         </div>
+                        <p th:if="${not orderBlueprint.personalCollection}">Dostawa</p>
                     </div>
                     <div class="col-md-auto text-right">
                         <h6>Ilość</h6>
-                        <div th:each="cp, status : ${@shoppingCartServiceImpl.getShoppingCart().positions}">
-                            <p th:text="${cp.quantity}"></p>
+                        <div th:each="p : ${orderBlueprint.positions}">
+                            <p th:text="${p.quantity}"></p>
                         </div>
+                        <p th:if="${not orderBlueprint.personalCollection}">1.0</p>
                     </div>
                     <div class="col-md-auto text-right">
                         <h6>Cena</h6>
-                        <div th:each="cp, status : ${@shoppingCartServiceImpl.getShoppingCart().positions}">
-                            <p th:if="${cp.quantity &lt; cp.ware.wholesaleThreshold}" th:text="${#numbers.formatDecimal(cp.ware.retailPrice, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
-                            <p th:if="${cp.quantity &gt;= cp.ware.wholesaleThreshold}" th:text="${#numbers.formatDecimal(cp.ware.wholesalePrice, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
+                        <div th:each="p : ${orderBlueprint.positions}">
+                            <p th:if="${p.quantity &lt; p.ware.wholesaleThreshold}" th:text="${#numbers.formatDecimal(p.ware.retailPrice, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
+                            <p th:if="${p.quantity &gt;= p.ware.wholesaleThreshold}" th:text="${#numbers.formatDecimal(p.ware.wholesalePrice, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
                         </div>
+                        <p th:if="${not orderBlueprint.personalCollection}" th:text="${#numbers.formatDecimal(@orderServiceImpl.calculateDeliveryCost(orderBlueprint), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
                         <h5 class="my-4">Do zapłaty:</h5>
                     </div>
                     <div class="col-md-auto text-right">
                         <h6>Wartość</h6>
-                        <div th:each="cp, status : ${@shoppingCartServiceImpl.getShoppingCart().positions}">
-                            <p th:text="${#numbers.formatDecimal(cp.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
+                        <div th:each="p : ${orderBlueprint.positions}">
+                            <p th:text="${#numbers.formatDecimal(p.price, 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
                         </div>
-                        <h5 class="my-4" th:text="${#numbers.formatDecimal(@shoppingCartServiceImpl.getSum(), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h5>
+                        <p th:if="${not orderBlueprint.personalCollection}" th:text="${#numbers.formatDecimal(@orderServiceImpl.calculateDeliveryCost(orderBlueprint), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></p>
+                        <h5 class="my-4" th:text="${#numbers.formatDecimal(@orderServiceImpl.getOrderValue(orderBlueprint), 0, 'DEFAULT', 2, 'DEFAULT') + ' zł'}"></h5>
                     </div>
                 </div>
             </div>

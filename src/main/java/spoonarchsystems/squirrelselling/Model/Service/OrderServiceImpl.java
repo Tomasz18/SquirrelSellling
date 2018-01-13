@@ -113,13 +113,19 @@ public class OrderServiceImpl implements OrderService {
         if(order.getInvoice())
             order.setInvoiceBuyerAddress(blueprint.getInvoiceBuyerAddress());
 
+        order.setDeliveryCost(0.0);
         order.setPersonalCollection(blueprint.getPersonalCollection());
-        if(!order.getPersonalCollection())
+        if(!order.getPersonalCollection()) {
             order.setDeliveryAddress(blueprint.getDeliveryAddress());
+            order.setDeliveryCost(calculateDeliveryCost(blueprint));
+        }
 
         order.setPostponementTime(blueprint.getPostponementTime());
+    }
 
-        order.setDeliveryCost(calculateDeliveryCost(blueprint.getPositions()));
+    @Override
+    public Order getPreparedOrder() {
+        return order;
     }
 
     @Override
@@ -137,12 +143,14 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    public Double calculateDeliveryCost(List<OrderPosition> positions) {
+    @Override
+    public Double calculateDeliveryCost(Order order) {
         Double weight = 0.0;
-        for(OrderPosition p : positions) {
+        for(OrderPosition p : order.getPositions()) {
             weight += p.getWare().getWeight() * p.getQuantity();
         }
-        Double cost;
+
+        Double cost = 0.0;
         if(weight <= 1)
             cost = 15.0;
         else if(weight <= 10)
@@ -150,6 +158,7 @@ public class OrderServiceImpl implements OrderService {
         else if(weight <= 25)
             cost = 30.0;
         else cost = 50.0;
+
         return cost;
     }
 
@@ -226,8 +235,10 @@ public class OrderServiceImpl implements OrderService {
     public double getOrderValue(Order order) {
         double orderValue = 0;
         for (OrderPosition position : order.getPositions()) {
-            orderValue += position.getPrice() * position.getQuantity();
+            orderValue += position.getPrice();
         }
+        if(order.getPersonalCollection() != null && !order.getPersonalCollection())
+            orderValue += calculateDeliveryCost(order);
         return orderValue;
     }
 }
