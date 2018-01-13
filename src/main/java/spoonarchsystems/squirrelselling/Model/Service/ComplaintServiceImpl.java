@@ -54,8 +54,7 @@ public class ComplaintServiceImpl implements ComplaintService {
                 OrderPosition orderPosition = findOrderPosition(complaintPosition.getNumber(), order.getPositions());
                 if (orderPosition == null) {
                     errors.add(INVALID_POSITION);
-                }
-                if (complaintPosition.getQuantity() == null || complaintPosition.getQuantity() <= 0 || complaintPosition.getQuantity() > orderPosition.getQuantity()) {
+                } else if (complaintPosition.getQuantity() == null || complaintPosition.getQuantity() <= 0 || complaintPosition.getQuantity() > orderPosition.getQuantity()) {
                     errors.add(BAD_AMOUNT);
                 }
             }
@@ -95,8 +94,12 @@ public class ComplaintServiceImpl implements ComplaintService {
     @Override
     public boolean saveComplaint(Complaint complaint) {
         Date submissionDate = new Date();
+        String complaintNumber = getNextComplaintNumber(submissionDate);
+        if (complaintNumber.length() > 15) {
+            return false;
+        }
         this.complaint.setDescription(complaint.getDescription());
-        this.complaint.setNumber(getNextComplaintNumber(submissionDate));
+        this.complaint.setNumber(complaintNumber);
         this.complaint.setStatus(Complaint.ComplaintStatus.submitted);
         this.complaint.setSubmissionDate(submissionDate);
         try {
