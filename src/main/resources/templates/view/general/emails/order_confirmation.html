@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <h1>Twoje zamówienie zostało złożone</h1>
+    <p>
+        Dziękujemy za skorzystanie z naszych usług.
+        Złożone zamówienie oczekuja na rozpatrzenie przez pracownika hurtowni.
+        Możesz śledzić zmianę jego statusu sprawdzając szczegóły zamówienia w panelu użytkownika.
+    </p>
+    <h2>Szczegóły zamówienia</h2>
+    <div th:text="'Numer: ' + ${order.number}"></div>
+    <div th:if="${not order.personalCollection}">
+        <b>Dostawa: </b>
+        <span>Kurier DPD</span><br />
+        <b>Koszt dostawy: </b>
+        <span th:text="(${#numbers.formatDecimal((order.deliveryCost)?: 0, 1, 2)}) + ' zł'"></span>
+        <p>
+            <div>
+                <b>Adres dostawy: </b>
+            </div>
+            <div th:if="${order.deliveryAddress.localNumber == null}"  th:text="${order.deliveryAddress.street + ' ' + order.deliveryAddress.buildingNumber}"></div>
+            <div th:if="${order.deliveryAddress.localNumber != null}"  th:text="${order.deliveryAddress.street + ' ' + order.deliveryAddress.buildingNumber + '/' + order.deliveryAddress.localNumber}"></div>
+            <div th:text="${order.deliveryAddress.postalCode}"></div>
+            <div th:text="${order.deliveryAddress.city}"></div>
+        </p>
+    </div>
+    <div th:if="${order.personalCollection}">
+        <b>Odbiór osobisty</b>
+        <p>ul. Balsamiczna 99<br/>50-518<br/>Wrocław</p>
+    </div>
+    <b>Realizacja:</b>
+    <span th:if="${order.postponementTime > 0}"  th:text="${'Odroczona: ' + order.postponementTime + ' dni'}"></span>
+    <span th:if="${order.postponementTime == 0}" th:text="'Natychmiastowa'"></span>
+    <p>
+        <b>Rodzaj rachunku: </b>
+        <span th:if="${order.invoice}">Faktura</span>
+        <span th:if="${not order.invoice}">Paragon</span>
+    </p>
+    <div th:if="${order.invoice}">
+        <b>Adres do faktury:</b>
+        <div th:if="${order.invoiceBuyerAddress.localNumber == null}" th:text="${order.invoiceBuyerAddress.street + ' ' + order.invoiceBuyerAddress.buildingNumber}"></div>
+        <div th:if="${order.invoiceBuyerAddress.localNumber != null}" th:text="${order.invoiceBuyerAddress.street + ' ' + order.invoiceBuyerAddress.buildingNumber + '/' + order.invoiceBuyerAddress.localNumber}"></div>
+        <div th:text="${order.invoiceBuyerAddress.postalCode}"></div>
+        <div th:text="${order.invoiceBuyerAddress.city}"></div>
+    </div>
+    <table style="margin-top: 30px;">
+        <thead>
+        <tr>
+            <th style="text-align:left;">Produkt</th>
+            <th style="text-align:left;">Ilość</th>
+            <th style="text-align: right;">Cena</th>
+            <th style="text-align: right;">Koszt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="position : ${order.positions}">
+            <td th:text="${position.ware.name}" style="padding-right: 30px;"></td>
+            <td th:text="(${#numbers.formatInteger(position.quantity, 1)}) + ' ' + ${position.ware.unit}"></td>
+            <td th:text="${#numbers.formatDecimal(position.price, 1, 2)} + ' zł'" style="text-align: right; padding-left: 30px;"></td>
+            <td th:text="${#numbers.formatDecimal(position.price * position.quantity, 1, 2)} + ' zł'" style="text-align: right; padding-left: 30px"></td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align:right;"><b th:text="${#numbers.formatDecimal(orderValue, 1, 2)} + ' zł'"></b></td>
+        </tr>
+        </tbody>
+    </table>
+    <h3 th:text="'Do zapłaty: ' + (${#numbers.formatDecimal(orderValue + order.deliveryCost, 1, 2)}) + ' zł'"></h3>
+</body>
+</html>

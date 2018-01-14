@@ -4,14 +4,20 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import spoonarchsystems.squirrelselling.Model.DAO.OrderDAO;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +42,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Override
     @Transactional
@@ -229,5 +241,22 @@ public class OrderServiceImpl implements OrderService {
             orderValue += position.getPrice() * position.getQuantity();
         }
         return orderValue;
+    }
+
+    @Override
+    public void sendOrderConfirmationEmail(Order order) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message);
+
+        Context context = new Context();
+        context.setVariable("order", order);
+        context.setVariable("orderValue", getOrderValue(order));
+        String content = templateEngine.process("view/general/emails/order_confirmation", context);
+
+        messageHelper.setTo(order.getCustomer().getEmail());
+        messageHelper.setText(content, true);
+        messageHelper.setSubject("Zamówienie " + order.getNumber());
+
+        javaMailSender.send(message);
     }
 }

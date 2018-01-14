@@ -3,6 +3,7 @@ package spoonarchsystems.squirrelselling.Model.Service;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface OrderService {
     void prepareOrder(Order blueprint);
     boolean saveOrder(Order blueprint);
     double getOrderValue(Order order);
+    void sendOrderConfirmationEmail(Order order) throws MessagingException;
 }
