@@ -94,7 +94,8 @@ public class OrderController {
     @PostMapping(value="/orderConfirmation")
     public String orderConfirmation() {
         Order order = orderService.getPreparedOrder();
-        if(orderService.saveOrder(order)) {
+        boolean saved = orderService.saveOrder(order);
+        if(saved) {
             System.out.println("##### SAVED :)");
         }
         else

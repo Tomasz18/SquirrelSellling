@@ -37,6 +37,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AddressService addressService;
+
     @Override
     @Transactional
     public Order getOrder(int id) {
@@ -110,17 +113,25 @@ public class OrderServiceImpl implements OrderService {
         order.setPositions(blueprint.getPositions());
 
         order.setInvoice(blueprint.getInvoice());
-        if(order.getInvoice())
-            order.setInvoiceBuyerAddress(blueprint.getInvoiceBuyerAddress());
+        if(order.getInvoice()) {
+            Address invoiceAddress = blueprint.getInvoiceBuyerAddress();
+            invoiceAddress.setId(addressService.getHashedId(invoiceAddress));
+            order.setInvoiceBuyerAddress(invoiceAddress);
+        }
+        else order.setInvoiceBuyerAddress(null);
 
         order.setDeliveryCost(0.0);
         order.setPersonalCollection(blueprint.getPersonalCollection());
         if(!order.getPersonalCollection()) {
-            order.setDeliveryAddress(blueprint.getDeliveryAddress());
+            Address deliveryAddress = blueprint.getDeliveryAddress();
+            deliveryAddress.setId(addressService.getHashedId(deliveryAddress));
+            order.setDeliveryAddress(deliveryAddress);
             order.setDeliveryCost(calculateDeliveryCost(blueprint));
         }
+        else order.setDeliveryAddress(null);
 
         order.setPostponementTime(blueprint.getPostponementTime());
+        order.setComplaining(false);
     }
 
     @Override
@@ -133,7 +144,10 @@ public class OrderServiceImpl implements OrderService {
         Date submissionDate = new Date();
         order.setSubmissionDate(submissionDate);
         order.setNumber(getNextOrderNumber(submissionDate));
+        order.setStatus(Order.OrderStatus.submitted);
         order.setCustomer(accountService.getCurrentCustomer().getCustomer());
+        System.out.println("##### account.id = " + String.valueOf(accountService.getCurrentCustomer().getId()));
+        System.out.println("##### order.customer = " + order.getCustomer());
         try {
             orderDAO.saveOrder(order);
         }

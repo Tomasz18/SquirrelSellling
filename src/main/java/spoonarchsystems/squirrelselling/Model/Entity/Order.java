@@ -1,6 +1,8 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -59,8 +61,8 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date saleDate;
 
-    @Column(name = "reklamacyjne", nullable = false)
-    private Boolean complaining;
+    @Column(name = "reklamacyjne", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean complaining;
 
     @Column(name = "dataSkompletowania")
     @Temporal(TemporalType.DATE)
@@ -69,8 +71,8 @@ public class Order {
     @Column(name = "czasDostawy")
     private Integer deliveryTime;
 
-    @Column(name = "odbiorOsobisty", nullable = false)
-    private Boolean personalCollection;
+    @Column(name = "odbiorOsobisty", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean personalCollection;
 
     @Column(name = "faktura", nullable = false)
     private Boolean invoice;
@@ -154,7 +156,7 @@ public class Order {
         this.saleDate = saleDate;
     }
 
-    public Boolean isComplaining() {
+    public Boolean getComplaining() {
         return complaining;
     }
 
