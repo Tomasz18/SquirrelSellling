@@ -83,5 +83,7 @@ public class OrderDAOImpl implements OrderDAO {
         System.out.println("##### order.customer.individual.name = " + order.getCustomer().getIndividualCustomer().getName());
         System.out.println("##### order.invoiceAddress = " + order.getInvoiceBuyerAddress());
         System.out.println("##### order.deliveryAddress = " + order.getDeliveryAddress());
+
+        session.persist(order);
     }
 }

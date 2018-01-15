@@ -148,6 +148,9 @@ public class OrderServiceImpl implements OrderService {
         order.setCustomer(accountService.getCurrentCustomer().getCustomer());
         System.out.println("##### account.id = " + String.valueOf(accountService.getCurrentCustomer().getId()));
         System.out.println("##### order.customer = " + order.getCustomer());
+        for(OrderPosition op : order.getPositions()) {
+            op.setOrder(order);
+        }
         try {
             orderDAO.saveOrder(order);
         }

@@ -1,12 +1,10 @@
 package spoonarchsystems.squirrelselling.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import spoonarchsystems.squirrelselling.Model.Entity.CustomerAccount;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import spoonarchsystems.squirrelselling.Model.Entity.ShoppingCart;
@@ -16,6 +14,7 @@ import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
 import spoonarchsystems.squirrelselling.Utils.BooleanWrapper;
 import spoonarchsystems.squirrelselling.Utils.DateWrapper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -95,11 +94,6 @@ public class OrderController {
     public String orderConfirmation() {
         Order order = orderService.getPreparedOrder();
         boolean saved = orderService.saveOrder(order);
-        if(saved) {
-            System.out.println("##### SAVED :)");
-        }
-        else
-            System.out.println("##### OOPS...");
         return "view/order/order_confirmation";
     }
 }
