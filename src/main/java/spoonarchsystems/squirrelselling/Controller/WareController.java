@@ -25,10 +25,10 @@ public class WareController {
     @RequestMapping(value="/shoppingCart", params={"removePos"})
     public String removeShoppingCartPosition(final HttpServletRequest req, @ModelAttribute ShoppingCart shoppingCart) {
         final Integer posNumber = Integer.valueOf(req.getParameter("removePos"));
+        shoppingCartService.updateQuantity(shoppingCart);
         shoppingCartService.remove(posNumber);
         if(shoppingCartService.getShoppingCart().getPositions().isEmpty())
             return "view/general/home";
-        shoppingCartService.updateQuantity(shoppingCart);
         return "redirect:/shoppingCart";
     }
 

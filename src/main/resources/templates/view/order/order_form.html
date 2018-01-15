@@ -52,6 +52,7 @@
                     <div class="col-10 px-0 my-1">
                         <input type="text" id="shippingPostalCodeInput" class="form-control" placeholder="Wpisz kod pocztowy" th:field="${orderBlueprint.deliveryAddress.postalCode}"/>
                     </div>
+                    <div th:field="${deliveryCost.value}" th:value="${@orderServiceImpl.calculateDeliveryCost(orderBlueprint)}"></div>
                     <div class="col-5 px-0 mt-4"><h6>Forma dostawy:</h6></div>
                     <div class="col-5 px-0 mt-4 text-right"><h6>Kurier DPD</h6></div>
                 </div>

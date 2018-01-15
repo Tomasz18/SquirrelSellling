@@ -49,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    @Autowired
+    private AddressService addressService;
+
     @Override
     @Transactional
     public Order getOrder(int id) {
@@ -122,16 +125,30 @@ public class OrderServiceImpl implements OrderService {
         order.setPositions(blueprint.getPositions());
 
         order.setInvoice(blueprint.getInvoice());
-        if(order.getInvoice())
-            order.setInvoiceBuyerAddress(blueprint.getInvoiceBuyerAddress());
+        if(order.getInvoice()) {
+            Address invoiceAddress = blueprint.getInvoiceBuyerAddress();
+            invoiceAddress.setId(addressService.getHashedId(invoiceAddress));
+            order.setInvoiceBuyerAddress(invoiceAddress);
+        }
+        else order.setInvoiceBuyerAddress(null);
 
+        order.setDeliveryCost(0.0);
         order.setPersonalCollection(blueprint.getPersonalCollection());
-        if(!order.getPersonalCollection())
-            order.setDeliveryAddress(blueprint.getDeliveryAddress());
+        if(!order.getPersonalCollection()) {
+            Address deliveryAddress = blueprint.getDeliveryAddress();
+            deliveryAddress.setId(addressService.getHashedId(deliveryAddress));
+            order.setDeliveryAddress(deliveryAddress);
+            order.setDeliveryCost(calculateDeliveryCost(blueprint));
+        }
+        else order.setDeliveryAddress(null);
 
         order.setPostponementTime(blueprint.getPostponementTime());
+        order.setComplaining(false);
+    }
 
-        order.setDeliveryCost(calculateDeliveryCost(blueprint.getPositions()));
+    @Override
+    public Order getPreparedOrder() {
+        return order;
     }
 
     @Override
@@ -139,7 +156,13 @@ public class OrderServiceImpl implements OrderService {
         Date submissionDate = new Date();
         order.setSubmissionDate(submissionDate);
         order.setNumber(getNextOrderNumber(submissionDate));
+        order.setStatus(Order.OrderStatus.submitted);
         order.setCustomer(accountService.getCurrentCustomer().getCustomer());
+        System.out.println("##### account.id = " + String.valueOf(accountService.getCurrentCustomer().getId()));
+        System.out.println("##### order.customer = " + order.getCustomer());
+        for(OrderPosition op : order.getPositions()) {
+            op.setOrder(order);
+        }
         try {
             orderDAO.saveOrder(order);
         }
@@ -149,12 +172,14 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    public Double calculateDeliveryCost(List<OrderPosition> positions) {
+    @Override
+    public Double calculateDeliveryCost(Order order) {
         Double weight = 0.0;
-        for(OrderPosition p : positions) {
+        for(OrderPosition p : order.getPositions()) {
             weight += p.getWare().getWeight() * p.getQuantity();
         }
-        Double cost;
+
+        Double cost = 0.0;
         if(weight <= 1)
             cost = 15.0;
         else if(weight <= 10)
@@ -162,6 +187,7 @@ public class OrderServiceImpl implements OrderService {
         else if(weight <= 25)
             cost = 30.0;
         else cost = 50.0;
+
         return cost;
     }
 
@@ -238,8 +264,10 @@ public class OrderServiceImpl implements OrderService {
     public double getOrderValue(Order order) {
         double orderValue = 0;
         for (OrderPosition position : order.getPositions()) {
-            orderValue += position.getPrice() * position.getQuantity();
+            orderValue += position.getPrice();
         }
+        if(order.getPersonalCollection() != null && !order.getPersonalCollection())
+            orderValue += calculateDeliveryCost(order);
         return orderValue;
     }
 

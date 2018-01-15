@@ -16,6 +16,8 @@ public interface OrderService {
     boolean setPostponement(Order blueprint, Integer value);
     List<String> getErrors();
     void prepareOrder(Order blueprint);
+    Order getPreparedOrder();
+    Double calculateDeliveryCost(Order order);
     boolean saveOrder(Order blueprint);
     double getOrderValue(Order order);
     void sendOrderConfirmationEmail(Order order) throws MessagingException;
