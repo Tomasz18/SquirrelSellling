@@ -14,6 +14,7 @@ import spoonarchsystems.squirrelselling.Model.Service.ShoppingCartService;
 import spoonarchsystems.squirrelselling.Utils.BooleanWrapper;
 import spoonarchsystems.squirrelselling.Utils.DateWrapper;
 
+import javax.mail.MessagingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -94,6 +95,13 @@ public class OrderController {
     public String orderConfirmation() {
         Order order = orderService.getPreparedOrder();
         boolean saved = orderService.saveOrder(order);
+        if (saved) {
+            try {
+                orderService.sendOrderConfirmationEmail(order);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
         return "view/order/order_confirmation";
     }
 }
