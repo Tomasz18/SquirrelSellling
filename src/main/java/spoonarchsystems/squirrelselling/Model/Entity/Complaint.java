@@ -4,10 +4,17 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Entity describes complaint with reference to {@link Order}
+ * contains complained wares
+ */
 @Entity
 @Table(name = "reklamacje")
 public class Complaint {
 
+    /**
+     * Represents complaint status
+     */
     public enum ComplaintStatus {
         submitted, accepted, rejected
     }

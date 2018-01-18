@@ -1,17 +1,21 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entity describes order
+ */
 @Entity
 @Table(name = "zamowienia")
 public class Order {
 
+    /**
+     * Represents order status
+     */
     public enum OrderStatus {
         submitted, rejected, waitingForRealization, sent, readyToCollect, realized, canceled
     }

@@ -3,6 +3,9 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Entity represent category which can be organized in tree
+ */
 @Entity
 @Table(name = "kategorie")
 public class Category {

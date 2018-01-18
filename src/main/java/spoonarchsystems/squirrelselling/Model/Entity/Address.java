@@ -2,8 +2,9 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
 
-// TODO: utowrzyć tabelę Adresy
-
+/**
+ * Entity describes address
+ */
 @Entity
 @Table(name = "adresy")
 public class Address {

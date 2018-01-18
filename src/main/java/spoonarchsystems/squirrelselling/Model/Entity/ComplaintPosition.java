@@ -2,6 +2,10 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity describes complaint position contains complained ware and it's quantity.
+ * It also have reference to complaint and ordinal number
+ */
 @Entity
 @Table(name = "pozycjereklamacji")
 @IdClass(ComplaintPositionPrimaryKey.class)

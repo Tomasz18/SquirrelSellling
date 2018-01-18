@@ -2,6 +2,10 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity describes order position contains {@link Ware}, its quantity and price with it was sell.
+ * It also have reference to related {@link Order} and ordinal number
+ */
 @Entity
 @Table(name = "pozycjezamowien")
 @IdClass(OrderPositionPrimaryKey.class)
