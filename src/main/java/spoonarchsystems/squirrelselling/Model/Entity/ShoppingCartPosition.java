@@ -1,5 +1,9 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
+/**
+ * Represents position in shopping cart contains ware reference, its quantity,
+ * price with it is selling and ordinal number
+ */
 public class ShoppingCartPosition {
 
     private int number;

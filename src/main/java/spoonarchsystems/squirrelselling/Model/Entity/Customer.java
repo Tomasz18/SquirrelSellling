@@ -1,16 +1,29 @@
 package spoonarchsystems.squirrelselling.Model.Entity;
 
-import org.aspectj.weaver.ast.Or;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Entity describes a customer contains submitted order list and
+ * reference to related business or individual customer
+ */
 @Entity
 @Table(name = "klienci")
 public class Customer implements Serializable{
 
-    public enum CustomerType { I, P }
+    /**
+     * Represents customer type
+     */
+    public enum CustomerType {
+        /**
+         * Individual customer
+         */
+        I,
+        /**
+         * Business customer
+         */
+        P }
 
     @Id
     @Column(name = "id")

@@ -2,6 +2,9 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity describes customer account with reference to customer related with
+ */
 @Entity
 @Table(name = "kontaklientow")
 public class CustomerAccount {

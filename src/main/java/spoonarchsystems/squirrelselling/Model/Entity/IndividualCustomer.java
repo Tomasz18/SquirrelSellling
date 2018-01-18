@@ -3,8 +3,10 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
 
-// TODO: utworzyć tabelę KlienciIndywidualni
-
+/**
+ * Entity describes individual customer
+ * contains reference to {@link Customer} connected with
+ */
 @Entity
 @Table(name = "klienciindywidualni")
 public class IndividualCustomer implements Serializable {

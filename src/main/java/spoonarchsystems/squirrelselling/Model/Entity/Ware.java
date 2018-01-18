@@ -2,6 +2,9 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity describes ware with reference to category
+ */
 @Entity
 @Table(name = "towary")
 public class Ware {

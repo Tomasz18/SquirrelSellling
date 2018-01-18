@@ -3,8 +3,10 @@ package spoonarchsystems.squirrelselling.Model.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
 
-// TODO: utworzyć tabelę Przedsiębiorstwa
-
+/**
+ * Entity describes business customer with typical
+ * data in Poland contains reference to {@link Customer} connected with
+ */
 @Entity
 @Table(name = "przedsiebiorstwa")
 public class BusinessCustomer  implements Serializable{
