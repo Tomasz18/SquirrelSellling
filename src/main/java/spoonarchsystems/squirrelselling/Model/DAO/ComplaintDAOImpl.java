@@ -14,12 +14,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Data Access Object provides database operations on {@link Complaint} objects
+ */
 @Repository
 public class ComplaintDAOImpl implements ComplaintDAO {
 
     @Autowired
     SessionFactory sessionFactory;
 
+    /**
+     * Persists given {@link Complaint} and its positions in database
+     * @param complaint to persist in database
+     */
     @Override
     public void saveComplaint(Complaint complaint) {
         Session session = sessionFactory.getCurrentSession();
@@ -29,6 +36,11 @@ public class ComplaintDAOImpl implements ComplaintDAO {
         session.persist(complaint);
     }
 
+    /**
+     * Returns a list of {@link Complaint} with given submission date
+     * @param submissionDate date with which complaints are fetched
+     * @return list of complaints with given submission date
+     */
     @Override
     public List<Complaint> getComplaintsBySubmissionDate(Date submissionDate) {
         Session session = sessionFactory.getCurrentSession();

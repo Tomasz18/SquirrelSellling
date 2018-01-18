@@ -13,12 +13,20 @@ import spoonarchsystems.squirrelselling.Model.Entity.Order;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object provides {@link CustomerAccount} database operations
+ */
 @Repository
 public class CustomerAccountDAOImpl implements CustomerAccountDAO{
 
     @Autowired
     private SessionFactory sessionFactory;
 
+    /**
+     * Returns {@link CustomerAccount} with set customer and its orders
+     * @param id ID of customer account to fetch
+     * @return customer account with given id
+     */
     @Transactional
     @Override
     public CustomerAccount getCustomerAccount(int id) {

@@ -1,9 +1,8 @@
 package spoonarchsystems.squirrelselling.Model.DAO;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import spoonarchsystems.squirrelselling.Model.Entity.Address;
@@ -17,12 +16,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Data Access Object provides {@link Order} database operations
+ */
 @Repository
 public class OrderDAOImpl implements OrderDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
 
+    /**
+     * Fetches and returns {@link Order} with given id from database
+     * @param id order id to fetch
+     * @return order with given id
+     */
     @Override
     public Order getOrder(int id) {
         Session session = sessionFactory.getCurrentSession();
@@ -30,6 +37,11 @@ public class OrderDAOImpl implements OrderDAO {
         return order;
     }
 
+    /**
+     * Return {@link Order} list with given submission date from database
+     * @param date submission date with which orders are fetched
+     * @return order lists with given submission date
+     */
     @Transactional
     @Override
     public List<Order> getOrdersBySubmissionDate(Date date) {
@@ -40,6 +52,10 @@ public class OrderDAOImpl implements OrderDAO {
         return (ArrayList<Order>) query.list();
     }
 
+    /**
+     * Persists given {@link Order}, its positions and set addresses in database
+     * @param order to save in database
+     */
     @Transactional
     @Override
     public void saveOrder(Order order) {
@@ -54,9 +70,6 @@ public class OrderDAOImpl implements OrderDAO {
             if(address == null) {
                 session.persist(invoiceAddress);
             }
-            else {
-                System.out.println("##### else");
-            }
         }
 
         if(!order.getPersonalCollection()) {
@@ -65,24 +78,7 @@ public class OrderDAOImpl implements OrderDAO {
             if(address == null) {
                 session.persist(deliveryAddress);
             }
-            else {
-                System.out.println("##### else");
-            }
         }
-
-//        List<Order> orderList = order.getCustomer().getOrders();
-//        if(orderList == null)
-//            orderList = new ArrayList<>();
-//        orderList.add(order);
-//        order.getCustomer().setOrders(orderList);
-
-        System.out.println("##### order.customer.id = " + order.getCustomer().getId());
-        System.out.println("##### order.customer.type = " + order.getCustomer().getCustomerType());
-        System.out.println("##### order.customer.business = " + order.getCustomer().getBusinessCustomer());
-        System.out.println("##### order.customer.individual = " + order.getCustomer().getIndividualCustomer());
-        System.out.println("##### order.customer.individual.name = " + order.getCustomer().getIndividualCustomer().getName());
-        System.out.println("##### order.invoiceAddress = " + order.getInvoiceBuyerAddress());
-        System.out.println("##### order.deliveryAddress = " + order.getDeliveryAddress());
 
         session.persist(order);
     }
