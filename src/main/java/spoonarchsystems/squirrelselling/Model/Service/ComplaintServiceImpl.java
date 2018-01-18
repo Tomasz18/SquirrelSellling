@@ -18,39 +18,39 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Service class for Complaint
- * Implements ComplaintService interface
- * Scoped for session
+ * Service class for Complaint.
+ * Implements ComplaintService interface.
+ * Scoped for session.
  */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ComplaintServiceImpl implements ComplaintService {
 
     /**
-     * Error code for invalid position (of type: int)
+     * Error code for invalid position (of type: int).
      */
     public static int INVALID_POSITION = 0;
     /**
-     * Error code for bad position amount (of type: int)
+     * Error code for bad position amount (of type: int).
      */
     public static int BAD_AMOUNT = 1;
 
     /**
-     * Prepared complaint (of type: {@link Complaint})
-     * Null when no complaint in preparation
+     * Prepared complaint (of type: {@link Complaint}).
+     * Null when no complaint in preparation.
      */
     private Complaint complaint;
 
     /**
-     * Data Access Object for complaint (of type: {@link ComplaintDAO})
+     * Data Access Object for complaint (of type: {@link ComplaintDAO}).
      */
     @Autowired
     private ComplaintDAO complaintDAO;
 
     /**
-     * Method that gets form data for complaint (of type: {@link Complaint})
-     * Filled data:     complaint positions (of type: {@link ArrayList})
-     *                  source order (of Type: Order)
+     * Method that gets form data for complaint (of type: {@link Complaint}),
+     * Filled data:     complaint positions (of type: {@link ArrayList}),
+     *                  source order (of Type: Order).
      *
      * @param order     order, source for complaint (of type: {@link Order})
      * @return partially filled complaint (of type: {@link Complaint})
@@ -71,9 +71,9 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Method for complaint validation based on source order
-     * Handles errors:  position is null (code: INVALID_POSITION)
-     *                  amount is null or less than 0 or complaint position quantity is greater than order position quantity (code: BAD_AMOUNT)
+     * Method for complaint validation based on source order.
+     * Handles errors:  position is null (code: INVALID_POSITION),
+     *                  amount is null or less than 0 or complaint position quantity is greater than order position quantity (code: BAD_AMOUNT).
      *
      * @param complaint complaint to validate (of type: {@link Complaint})
      * @param order     source order (of type: Order)
@@ -101,9 +101,9 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Method that prepares complaint to be submitted
-     * Filled data:     complaint positions with correct numbers (of type: {@link ArrayList})
-     *                  source order (of type: {@link Order})
+     * Method that prepares complaint to be submitted.
+     * Filled data:     complaint positions with correct numbers (of type: {@link ArrayList}),
+     *                  source order (of type: {@link Order}).
      *
      * @param complaint complaint object to fill (of type: {@link Complaint})
      * @param order     source order (of type: {@link Order})
@@ -130,8 +130,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Getter for prepared complaint
-     * Returns null if prepared complaint is not set
+     * Getter for prepared complaint.
+     * Returns null if prepared complaint is not set.
      *
      * @return prepared complaint (of type: {@link Complaint})
      */
@@ -141,7 +141,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Method that saves complaint to database
+     * Method that saves complaint to database.
      *
      * @param complaint complaint to save (of type: {@link Complaint})
      * @return save success or failure (of type: boolean)
@@ -167,8 +167,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Method that finds order position by its number in given order positions list
-     * Returns null if position not found
+     * Method that finds order position by its number in given order positions list.
+     * Returns null if position not found.
      *
      * @param number    position number to find (of type: Integer)
      * @param positions list of positions, search source (of type: {@link List})
@@ -184,7 +184,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     /**
-     * Method that gets next complaint number
+     * Method that gets next complaint number.
      *
      * @param date complaint submission date (of type: Date)
      * @return next complaint number (of type: String)

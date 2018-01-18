@@ -23,74 +23,74 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Service class for Order
- * Implements OrderService interface
- * Scoped for session
+ * Service class for Order.
+ * Implements OrderService interface.
+ * Scoped for session.
  */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderServiceImpl implements OrderService {
 
     /**
-     * Message for empty delivery address error (of type: String)
+     * Message for empty delivery address error (of type: String).
      */
     private static final String EMPTY_DELIVERY_ADDRESS = "Nie określono adresu dostawy! Uzupełnij pola.";
     /**
-     * Message for empty postponement date error (of type: String)
+     * Message for empty postponement date error (of type: String).
      */
     private static final String EMPTY_POSTPONEMENT_DATE = "Nie określono daty odroczenia! Uzupełnij pole.";
     /**
-     * Message for invalid postponement date error (of type: String)
+     * Message for invalid postponement date error (of type: String).
      */
     private static final String INVALID_POSTPONEMENT_DATE = "Wprowadzono niepoprawną datę odroczenia! Musi mieścić się w zakresie 7 - 30 dni licząc od dnia dzisiejszego.";
     /**
-     * Message for invalid shopping cart error (of type: String)
+     * Message for invalid shopping cart error (of type: String).
      */
     private static final String INVALID_SHOPPING_CART = "Wystąpił błąd z koszykiem! Sprawdź, czy dodałeś towary do koszyka przed złożeniem zamówienia.";
 
     /**
-     * List of errors (of type: String)
+     * List of errors (of type: String).
      */
     private List<String> errors = new ArrayList<>();
 
     /**
-     * Prepared order (of type: Order)
-     * Null if not set
+     * Prepared order (of type: Order).
+     * Null if not set.
      */
     private Order order;
 
     /**
-     * Data Access Object for order (of type: OrderDAO)
+     * Data Access Object for order (of type: OrderDAO).
      */
     @Autowired
     private OrderDAO orderDAO;
 
     /**
-     * Account service object (of type: AccountService)
+     * Account service object (of type: AccountService).
      */
     @Autowired
     private AccountService accountService;
 
     /**
-     * Mail sender object (of type: JavaMailSender)
+     * Mail sender object (of type: JavaMailSender).
      */
     @Autowired
     private JavaMailSender javaMailSender;
 
     /**
-     * Template engine for mail (of type: TemplateEngine)
+     * Template engine for mail (of type: TemplateEngine).
      */
     @Autowired
     private TemplateEngine templateEngine;
 
     /**
-     * Address service object (of type: AddressService)
+     * Address service object (of type: AddressService).
      */
     @Autowired
     private AddressService addressService;
 
     /**
-     * Method that gets order by its id
+     * Method that gets order by its id.
      *
      * @param id    order id (of type: int)
      * @return order object for given id (of type: {@link Order})
@@ -103,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that gets blueprint for order for given shopping cart (of type: {@link ShoppingCart})
+     * Method that gets blueprint for order for given shopping cart (of type: {@link ShoppingCart}).
      *
      * @param shoppingCart  shopping cart, data source for blueprint (of type: {@link ShoppingCart})
      * @return partially filled order object (of type: Order)
@@ -118,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that translates shopping cart positions to order positions and sets them for order object
+     * Method that translates shopping cart positions to order positions and sets them for order object.
      *
      * @param blueprint     order blueprint to fill (of type: {@link Order})
      * @param shoppingCart  shopping cart, data source (of type: {@link ShoppingCart})
@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that validates order blueprint
+     * Method that validates order blueprint.
      *
      * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failure (od type: boolean)
@@ -151,8 +151,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that sets order postponement time based on given date
-     * Validates postponement time - must be in range [7, 30]
+     * Method that sets order postponement time based on given date.
+     * Validates postponement time - must be in range [7, 30].
      *
      * @param blueprint     order blueprint (of type: {@link Order})
      * @param date          postponement date (of type: Date)
@@ -175,8 +175,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that sets postponement time for order blueprint
-     * Postponement value must be greater than 0
+     * Method that sets postponement time for order blueprint.
+     * Postponement value must be greater than 0.
      *
      * @param blueprint     order blueprint (of type: {@link Order})
      * @param value         postponement time value (of type: Integer)
@@ -191,7 +191,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Getter for errors
+     * Getter for errors.
      *
      * @return errors (of type: {@link List})
      */
@@ -201,15 +201,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that prepares order
-     * Filled data:     order positions (of type: {@link List})
-     *                  invoice (of type: Boolean)
-     *                  invoice address, null if invoice is false (of type: {@link Address})
-     *                  personal collection (of type: Boolean)
-     *                  delivery address, null if personal collection is true (of type: {@link Address})
-     *                  delivery cost, 0.0 if personal collection is true (of type: Double)
-     *                  postponement time (of type: Integer)
-     *                  complaining, set to false (of type: Boolean)
+     * Method that prepares order.
+     * Filled data:     order positions (of type: {@link List}),
+     *                  invoice (of type: Boolean),
+     *                  invoice address, null if invoice is false (of type: {@link Address}),
+     *                  personal collection (of type: Boolean),
+     *                  delivery address, null if personal collection is true (of type: {@link Address}),
+     *                  delivery cost, 0.0 if personal collection is true (of type: Double),
+     *                  postponement time (of type: Integer),
+     *                  complaining, set to false (of type: Boolean).
      *
      * @param blueprint order blueprint (not fully filled object)
      */
@@ -242,8 +242,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Getter for prepared order
-     * Null if not set
+     * Getter for prepared order.
+     * Null if not set.
      *
      * @return prepared order (of type: {@link Order})
      */
@@ -253,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that saves order to database
+     * Method that saves order to database.
      *
      * @param order     order to save (of type: {@link Order})
      * @return save success or failuer (of type: Boolean)
@@ -278,7 +278,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that calculates delivery cost for order
+     * Method that calculates delivery cost for order.
      *
      * @param order     order (of type: {@link Order})
      * @return delivery cost (of type: Double)
@@ -303,8 +303,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that validates order positions
-     * Adds error message to errors if invalid
+     * Method that validates order positions.
+     * Adds error message to errors if invalid.
      *
      * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failuer (of type: boolean)
@@ -334,8 +334,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that validates shipment address
-     * Adds error message to errors if invalid
+     * Method that validates shipment address.
+     * Adds error message to errors if invalid.
      *
      * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failure (of type: boolean)
@@ -364,7 +364,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that calculates postponement time based on given date
+     * Method that calculates postponement time based on given date.
      *
      * @param date      date, postponement source (of type: Date)
      * @return postponement time in days (of type: int)
@@ -376,7 +376,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that gets next order number based on given submission date
+     * Method that gets next order number based on given submission date.
      *
      * @param date      order submission date (of type: Date)
      * @return next order number (of type: String)
@@ -398,7 +398,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that gets order value
+     * Method that gets order value.
      *
      * @param order     order, data source (of type: {@link Order})
      * @return order value (of type: double)
@@ -415,8 +415,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that sends order confirmation email
-     * May throw MessagingException
+     * Method that sends order confirmation email.
+     * May throw MessagingException.
      *
      * @param order     placed order (of type: {@link Order})
      * @throws MessagingException when mail sending fails

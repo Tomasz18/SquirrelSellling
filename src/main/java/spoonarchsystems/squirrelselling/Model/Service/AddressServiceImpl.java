@@ -8,15 +8,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Service class for Address
- * Implements the AddressService interface
+ * Service class for Address.
+ * Implements the AddressService interface.
  */
 @Service
 public class AddressServiceImpl implements AddressService {
 
     /**
-     * Method that gets the hash for address id
-     * Used algorithm - SHA-512
+     * Method that gets the hash for address id.
+     * Used algorithm - SHA-512.
      *
      * @param address   address object, source to be hashed (of type: Address)
      * @return hex hash value for address object (of type: String)

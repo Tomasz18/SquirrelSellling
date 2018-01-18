@@ -14,26 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service class for ShoppingCart
- * Scoped for session
+ * Service class for ShoppingCart.
+ * Scoped for session.
  */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     /**
-     * Data Access Object for ware (of type: {@link WareDAO})
+     * Data Access Object for ware (of type: {@link WareDAO}).
      */
     @Autowired
     private WareDAO wareDAO;
 
     /**
-     * Shopping cart object
+     * Shopping cart object.
      */
     private ShoppingCart shoppingCart = new ShoppingCart();
 
     /**
-     * Getter for existing shopping cart
+     * Getter for existing shopping cart.
      *
      * @return shopping cart (of type: {@link ShoppingCart})
      */
@@ -43,8 +43,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that updates quantities of shopping cart positions
-     * Validates if new position quantities are correct
+     * Method that updates quantities of shopping cart positions.
+     * Validates if new position quantities are correct.
      *
      * @param cart  shopping cart to update (of type: {@link ShoppingCart})
      * @return update success or failure (of type: boolean)
@@ -66,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that removes shopping cart position for given number
+     * Method that removes shopping cart position for given number.
      *
      * @param number    number of position to remove (of type: int)
      * @return removal success or failure (of type: boolean)
@@ -87,7 +87,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that clears shopping cart position list
+     * Method that clears shopping cart position list.
      */
     @Override
     public void clear() {
@@ -95,7 +95,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that gets total price of shopping cart
+     * Method that gets total price of shopping cart.
      *
      * @return shopping cart total (of type: double)
      */
@@ -108,7 +108,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Getter for shopping cart position list size
+     * Getter for shopping cart position list size.
      *
      * @return shopping cart size (of type: int)
      */
@@ -118,8 +118,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that initializes test data for shopping cart
-     * Mock, for demonstration purposes
+     * Method that initializes test data for shopping cart.
+     * Mock, for demonstration purposes.
      */
     @Override
     public void initTestData() {
@@ -139,7 +139,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
-     * Method that validates shopping cart position quantities
+     * Method that validates shopping cart position quantities.
      *
      * @param quantities    list of shopping cart positions, qunatites source (of type: List<ShoppingCartPosition>)
      * @param positions     list of shopping cart positions, to compare (of type: List<ShoppingCartPosition>)
