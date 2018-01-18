@@ -13,20 +13,42 @@ import spoonarchsystems.squirrelselling.Model.Entity.Ware;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for ShoppingCart
+ * Scoped for session
+ */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
+    /**
+     * Data Access Object for ware (of type: WareDAO)
+     */
     @Autowired
     private WareDAO wareDAO;
 
+    /**
+     * Shopping cart object
+     */
     private ShoppingCart shoppingCart = new ShoppingCart();
 
+    /**
+     * Getter for existing shopping cart
+     *
+     * @return shopping cart (of type: ShoppingCart)
+     */
     @Override
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
 
+    /**
+     * Method that updates quantities of shopping cart positions
+     * Validates if new position quantities are correct
+     *
+     * @param cart  shopping cart to update (of type: ShoppingCart)
+     * @return update success or failure (of type: boolean)
+     */
     @Override
     public boolean updateQuantity(ShoppingCart cart) {
         List<ShoppingCartPosition> positions = shoppingCart.getPositions();
@@ -43,6 +65,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return true;
     }
 
+    /**
+     * Method that removes shopping cart position for given number
+     *
+     * @param number    number of position to remove (of type: int)
+     * @return removal success or failure (of type: boolean)
+     */
     @Override
     public boolean remove(int number) {
         List<ShoppingCartPosition> positions = shoppingCart.getPositions();
@@ -58,11 +86,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return removed;
     }
 
+    /**
+     * Method that clears shopping cart position list
+     */
     @Override
     public void clear() {
         shoppingCart.getPositions().clear();
     }
 
+    /**
+     * Method that gets total price of shopping cart
+     *
+     * @return shopping cart total (of type: double)
+     */
     @Override
     public double getSum() {
         double sum = 0;
@@ -71,11 +107,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return sum;
     }
 
+    /**
+     * Getter for shopping cart position list size
+     *
+     * @return shopping cart size (of type: int)
+     */
     @Override
     public int getSize() {
         return shoppingCart.getPositions().size();
     }
 
+    /**
+     * Method that initializes test data for shopping cart
+     * Mock, for demonstration purposes
+     */
     @Override
     public void initTestData() {
         List<ShoppingCartPosition> posList = new ArrayList<>();
@@ -93,6 +138,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setPositions(posList);
     }
 
+    /**
+     * Method that validates shopping cart position quantities
+     *
+     * @param quantities    list of shopping cart positions, qunatites source (of type: List<ShoppingCartPosition>)
+     * @param positions     list of shopping cart positions, to compare (of type: List<ShoppingCartPosition>)
+     * @return validation success or failure (of type: boolean)
+     */
     private boolean validateQuantity(List<ShoppingCartPosition> quantities, List<ShoppingCartPosition> positions) {
         for(int i = 0; i < positions.size(); i++)
             if(quantities.get(i).getQuantity() > positions.get(i).getWare().getDisposableState())

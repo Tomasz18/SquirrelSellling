@@ -22,36 +22,79 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Service class for Order
+ * Implements OrderService interface
+ * Scoped for session
+ */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderServiceImpl implements OrderService {
 
+    /**
+     * Message for empty delivery address error (of type: String)
+     */
     private static final String EMPTY_DELIVERY_ADDRESS = "Nie określono adresu dostawy! Uzupełnij pola.";
-    private static final String EMPTY_INVOICE_ADDRESS = "Nie określono adresu nabywcy dla faktury! Uzupełnij pola.";
+    /**
+     * Message for empty postponement date error (of type: String)
+     */
     private static final String EMPTY_POSTPONEMENT_DATE = "Nie określono daty odroczenia! Uzupełnij pole.";
+    /**
+     * Message for invalid postponement date error (of type: String)
+     */
     private static final String INVALID_POSTPONEMENT_DATE = "Wprowadzono niepoprawną datę odroczenia! Musi mieścić się w zakresie 7 - 30 dni licząc od dnia dzisiejszego.";
+    /**
+     * Message for invalid shopping cart error (of type: String)
+     */
     private static final String INVALID_SHOPPING_CART = "Wystąpił błąd z koszykiem! Sprawdź, czy dodałeś towary do koszyka przed złożeniem zamówienia.";
-    private static final String SAVE_ERROR = "Wystąpił błąd przy zapisie zamówienia! Proszę, spróbuj złożyć je ponownie, a jeśli błąd będzie nadal występował, skontaktuj się z obsługą hurtowni.";
 
+    /**
+     * List of errors (of type: String)
+     */
     private List<String> errors = new ArrayList<>();
 
+    /**
+     * Prepared order (of type: Order)
+     * Null if not set
+     */
     private Order order;
 
+    /**
+     * Data Access Object for order (of type: OrderDAO)
+     */
     @Autowired
     private OrderDAO orderDAO;
 
+    /**
+     * Account service object (of type: AccountService)
+     */
     @Autowired
     private AccountService accountService;
 
+    /**
+     * Mail sender object (of type: JavaMailSender)
+     */
     @Autowired
     private JavaMailSender javaMailSender;
 
+    /**
+     * Template engine for mail (of type: TemplateEngine)
+     */
     @Autowired
     private TemplateEngine templateEngine;
 
+    /**
+     * Address service object (of type: AddressService)
+     */
     @Autowired
     private AddressService addressService;
 
+    /**
+     * Method that gets order by its id
+     *
+     * @param id    order id (of type: int)
+     * @return order object for given id (of type: Order)
+     */
     @Override
     @Transactional
     public Order getOrder(int id) {
@@ -59,6 +102,12 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * Method that gets blueprint for order for given shopping cart (of type: Order)
+     *
+     * @param shoppingCart  shopping cart, data source for blueprint (of type: ShoppingCart)
+     * @return partially filled order object (of type: Order)
+     */
     @Override
     public Order getOrderBlueprint(ShoppingCart shoppingCart) {
         Order blueprint = new Order();
@@ -68,6 +117,12 @@ public class OrderServiceImpl implements OrderService {
         return blueprint;
     }
 
+    /**
+     * Method that translates shopping cart positions to order positions and sets them for order object
+     *
+     * @param blueprint     order blueprint to fill (of type: Order)
+     * @param shoppingCart  shopping cart, data source (of type: ShoppingCart)
+     */
     @Override
     public void setOrderPositions(Order blueprint, ShoppingCart shoppingCart) {
         List<OrderPosition> positions = new ArrayList<>();
@@ -83,12 +138,26 @@ public class OrderServiceImpl implements OrderService {
         blueprint.setPositions(positions);
     }
 
+    /**
+     * Method that validates order blueprint
+     *
+     * @param blueprint     order blueprint to validate (of type: Order)
+     * @return validation success or failure (od type: boolean)
+     */
     @Override
     public boolean validateOrder(Order blueprint) {
         errors.clear();
         return validatePositions(blueprint) && validateShipmentAddress(blueprint);
     }
 
+    /**
+     * Method that sets order postponement time based on given date
+     * Validates postponement time - must be in range <7, 30>
+     *
+     * @param blueprint     order blueprint (of type: Order)
+     * @param date          postponement date (of type: Date)
+     * @return validation success or failure (of type: boolean)
+     */
     @Override
     public boolean setPostponement(Order blueprint, Date date) {
         if(date == null) {
@@ -105,6 +174,14 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Method that sets postponement time for order blueprint
+     * Postponement value must be greater than 0
+     *
+     * @param blueprint     order blueprint (of type: Order)
+     * @param value         postponement time value (of type: Integer)
+     * @return success or failure to set postponement (of type: boolean)
+     */
     @Override
     public boolean setPostponement(Order blueprint, Integer value) {
         if(value < 0)
@@ -113,11 +190,29 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Getter for errors
+     *
+     * @return errors (of type: List<String>)
+     */
     @Override
     public List<String> getErrors() {
         return errors;
     }
 
+    /**
+     * Method that prepares order
+     * Filled data:     order positions (of type: List<OrderPosition>)
+     *                  invoice (of type: Boolean)
+     *                  invoice address, null if invoice is false (of type: Address)
+     *                  personal collection (of type: Boolean)
+     *                  delivery address, null if personal collection is true (of type: Address)
+     *                  delivery cost, 0.0 if personal collection is true (of type: Double)
+     *                  postponement time (of type: Integer)
+     *                  complaining, set to false (of type: Boolean)
+     *
+     * @param blueprint
+     */
     @Override
     public void prepareOrder(Order blueprint) {
         order = new Order();
@@ -146,11 +241,23 @@ public class OrderServiceImpl implements OrderService {
         order.setComplaining(false);
     }
 
+    /**
+     * Getter for prepared order
+     * Null if not set
+     *
+     * @return prepared order (of type: Order)
+     */
     @Override
     public Order getPreparedOrder() {
         return order;
     }
 
+    /**
+     * Method that saves order to database
+     *
+     * @param order     order to save (of type: Order)
+     * @return save success or failuer (of type: Boolean)
+     */
     @Override
     public boolean saveOrder(Order order) {
         Date submissionDate = new Date();
@@ -158,8 +265,6 @@ public class OrderServiceImpl implements OrderService {
         order.setNumber(getNextOrderNumber(submissionDate));
         order.setStatus(Order.OrderStatus.submitted);
         order.setCustomer(accountService.getCurrentCustomer().getCustomer());
-        System.out.println("##### account.id = " + String.valueOf(accountService.getCurrentCustomer().getId()));
-        System.out.println("##### order.customer = " + order.getCustomer());
         for(OrderPosition op : order.getPositions()) {
             op.setOrder(order);
         }
@@ -172,6 +277,12 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Method that calculates delivery cost for order
+     *
+     * @param order     order (of type: Order)
+     * @return delivery cost (of type: Double)
+     */
     @Override
     public Double calculateDeliveryCost(Order order) {
         Double weight = 0.0;
@@ -191,6 +302,13 @@ public class OrderServiceImpl implements OrderService {
         return cost;
     }
 
+    /**
+     * Method that validates order positions
+     * Adds error message to errors if invalid
+     *
+     * @param blueprint     order blueprint to validate (of type: Order)
+     * @return validation success or failuer (of type: boolean)
+     */
     private boolean validatePositions(Order blueprint) {
         if(blueprint.getPositions() == null || blueprint.getPositions().size() == 0) {
             errors.add(INVALID_SHOPPING_CART);
@@ -215,6 +333,13 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Method that validates shipment address
+     * Adds error message to errors if invalid
+     *
+     * @param blueprint     order blueprint to validate (of type: Order)
+     * @return validation success or failure (of type: boolean)
+     */
     private boolean validateShipmentAddress(Order blueprint) {
         Address shipmentAddress = blueprint.getDeliveryAddress();
         if(!blueprint.getPersonalCollection()) {
@@ -238,12 +363,24 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    /**
+     * Method that calculates postponement time based on given date
+     *
+     * @param date      date, postponement source (of type: Date)
+     * @return postponement time in days (of type: int)
+     */
     private int calculatePostponement(Date date) {
         Date now = new Date();
         long diff = date.getTime() - now.getTime();
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Method that gets next order number based on given submission date
+     *
+     * @param date      order submission date (of type: Date)
+     * @return next order number (of type: String)
+     */
     private String getNextOrderNumber(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(date);
@@ -260,6 +397,12 @@ public class OrderServiceImpl implements OrderService {
         return String.format("%04d", maxNumber + 1) + "/" + formattedDate;
     }
 
+    /**
+     * Method that gets order value
+     *
+     * @param order     order, data source (of type: Order)
+     * @return order value (of type: double)
+     */
     @Override
     public double getOrderValue(Order order) {
         double orderValue = 0;
@@ -271,6 +414,13 @@ public class OrderServiceImpl implements OrderService {
         return orderValue;
     }
 
+    /**
+     * Method that sends order confirmation email
+     * May throw MessagingException
+     *
+     * @param order     placed order (of type: Order)
+     * @throws MessagingException
+     */
     @Override
     public void sendOrderConfirmationEmail(Order order) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();

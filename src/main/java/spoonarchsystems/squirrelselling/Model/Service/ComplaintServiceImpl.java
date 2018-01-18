@@ -17,18 +17,44 @@ import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Service class for Complaint
+ * Implements ComplaintService interface
+ * Scoped for session
+ */
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ComplaintServiceImpl implements ComplaintService {
 
+    /**
+     * Error code for invalid position (of type: int)
+     */
     public static int INVALID_POSITION = 0;
+    /**
+     * Error code for bad position amount (of type: int)
+     */
     public static int BAD_AMOUNT = 1;
 
+    /**
+     * Prepared complaint (of type: Complaint)
+     * Null when no complaint in preparation
+     */
     private Complaint complaint;
 
+    /**
+     * Data Access Object for complaint (of type: ComplaintDAO)
+     */
     @Autowired
     private ComplaintDAO complaintDAO;
 
+    /**
+     * Method that gets form data for complaint (of type: Complaint)
+     * Filled data:     complaint positions (of type: ArrayList<ComplaintPosition>)
+     *                  source order (of Type: Order)
+     *
+     * @param order     order, source for complaint (of type: Order)
+     * @return partially filled complaint (of type: Complaint)
+     */
     @Override
     public Complaint getComplaintForm(Order order) {
         Complaint complaintForm = new Complaint();
@@ -44,6 +70,15 @@ public class ComplaintServiceImpl implements ComplaintService {
         return complaintForm;
     }
 
+    /**
+     * Method for complaint validation based on source order
+     * Handles errors:  position is null (code: INVALID_POSITION)
+     *                  amount is null or less than 0 or complaint position quantity is greater than order position quantity (code: BAD_AMOUNT)
+     *
+     * @param complaint complaint to validate (of type: Complaint)
+     * @param order     source order (of type: Order)
+     * @return set of errors, empty when successfully validated (of type: Set<Integer>)
+     */
     @Override
     public Set<Integer> validateComplaint(Complaint complaint, Order order) {
         HashSet<Integer> errors = new HashSet<>();
@@ -65,6 +100,15 @@ public class ComplaintServiceImpl implements ComplaintService {
         return  errors;
     }
 
+    /**
+     * Method that prepares complaint to be submitted
+     * Filled data:     complaint positions with correct numbers (of type: ArrayList<ComplaintPosition>)
+     *                  source order (of type: Order)
+     *
+     * @param complaint complaint object to fill (of type: Complaint)
+     * @param order     source order (of type: Order)
+     * @return prepared complaint (of type: Complaint)
+     */
     @Override
     public Complaint prepareComplaint(Complaint complaint, Order order) {
         int newNumber = 1;
@@ -85,11 +129,23 @@ public class ComplaintServiceImpl implements ComplaintService {
         return this.complaint;
     }
 
+    /**
+     * Getter for prepared complaint
+     * Returns null if prepared complaint is not set
+     *
+     * @return prepared complaint (of type: Complaint)
+     */
     @Override
     public Complaint getCurrentComplaint() {
         return this.complaint;
     }
 
+    /**
+     * Method that saves complaint to database
+     *
+     * @param complaint complaint to save (of type: Complaint)
+     * @return save success or failure (of type: boolean)
+     */
     @Transactional
     @Override
     public boolean saveComplaint(Complaint complaint) {
@@ -110,6 +166,14 @@ public class ComplaintServiceImpl implements ComplaintService {
             return true;
     }
 
+    /**
+     * Method that finds order position by its number in given order positions list
+     * Returns null if position not found
+     *
+     * @param number    position number to find (of type: Integer)
+     * @param positions list of positions, search source (of type: List<OrderPosition>)
+     * @return found position or null (of type: OrderPosition)
+     */
     private OrderPosition findOrderPosition(Integer number, List<OrderPosition> positions) {
         for (OrderPosition orderPosition : positions) {
             if (orderPosition.getNumber().equals(number)) {
@@ -119,6 +183,12 @@ public class ComplaintServiceImpl implements ComplaintService {
         return null;
     }
 
+    /**
+     * Method that gets next complaint number
+     *
+     * @param date complaint submission date (of type: Date)
+     * @return next complaint number (of type: String)
+     */
     private String getNextComplaintNumber(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(date);
