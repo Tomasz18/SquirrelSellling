@@ -36,24 +36,24 @@ public class ComplaintServiceImpl implements ComplaintService {
     public static int BAD_AMOUNT = 1;
 
     /**
-     * Prepared complaint (of type: Complaint)
+     * Prepared complaint (of type: {@link Complaint})
      * Null when no complaint in preparation
      */
     private Complaint complaint;
 
     /**
-     * Data Access Object for complaint (of type: ComplaintDAO)
+     * Data Access Object for complaint (of type: {@link ComplaintDAO})
      */
     @Autowired
     private ComplaintDAO complaintDAO;
 
     /**
-     * Method that gets form data for complaint (of type: Complaint)
-     * Filled data:     complaint positions (of type: ArrayList<ComplaintPosition>)
+     * Method that gets form data for complaint (of type: {@link Complaint})
+     * Filled data:     complaint positions (of type: {@link ArrayList})
      *                  source order (of Type: Order)
      *
-     * @param order     order, source for complaint (of type: Order)
-     * @return partially filled complaint (of type: Complaint)
+     * @param order     order, source for complaint (of type: {@link Order})
+     * @return partially filled complaint (of type: {@link Complaint})
      */
     @Override
     public Complaint getComplaintForm(Order order) {
@@ -75,9 +75,9 @@ public class ComplaintServiceImpl implements ComplaintService {
      * Handles errors:  position is null (code: INVALID_POSITION)
      *                  amount is null or less than 0 or complaint position quantity is greater than order position quantity (code: BAD_AMOUNT)
      *
-     * @param complaint complaint to validate (of type: Complaint)
+     * @param complaint complaint to validate (of type: {@link Complaint})
      * @param order     source order (of type: Order)
-     * @return set of errors, empty when successfully validated (of type: Set<Integer>)
+     * @return set of errors, empty when successfully validated (of type: {@link Set})
      */
     @Override
     public Set<Integer> validateComplaint(Complaint complaint, Order order) {
@@ -102,12 +102,12 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     /**
      * Method that prepares complaint to be submitted
-     * Filled data:     complaint positions with correct numbers (of type: ArrayList<ComplaintPosition>)
-     *                  source order (of type: Order)
+     * Filled data:     complaint positions with correct numbers (of type: {@link ArrayList})
+     *                  source order (of type: {@link Order})
      *
-     * @param complaint complaint object to fill (of type: Complaint)
-     * @param order     source order (of type: Order)
-     * @return prepared complaint (of type: Complaint)
+     * @param complaint complaint object to fill (of type: {@link Complaint})
+     * @param order     source order (of type: {@link Order})
+     * @return prepared complaint (of type: {@link Complaint})
      */
     @Override
     public Complaint prepareComplaint(Complaint complaint, Order order) {
@@ -133,7 +133,7 @@ public class ComplaintServiceImpl implements ComplaintService {
      * Getter for prepared complaint
      * Returns null if prepared complaint is not set
      *
-     * @return prepared complaint (of type: Complaint)
+     * @return prepared complaint (of type: {@link Complaint})
      */
     @Override
     public Complaint getCurrentComplaint() {
@@ -143,7 +143,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     /**
      * Method that saves complaint to database
      *
-     * @param complaint complaint to save (of type: Complaint)
+     * @param complaint complaint to save (of type: {@link Complaint})
      * @return save success or failure (of type: boolean)
      */
     @Transactional
@@ -171,8 +171,8 @@ public class ComplaintServiceImpl implements ComplaintService {
      * Returns null if position not found
      *
      * @param number    position number to find (of type: Integer)
-     * @param positions list of positions, search source (of type: List<OrderPosition>)
-     * @return found position or null (of type: OrderPosition)
+     * @param positions list of positions, search source (of type: {@link List})
+     * @return found position or null (of type: {@link OrderPosition})
      */
     private OrderPosition findOrderPosition(Integer number, List<OrderPosition> positions) {
         for (OrderPosition orderPosition : positions) {

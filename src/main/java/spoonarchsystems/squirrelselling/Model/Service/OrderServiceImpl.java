@@ -93,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
      * Method that gets order by its id
      *
      * @param id    order id (of type: int)
-     * @return order object for given id (of type: Order)
+     * @return order object for given id (of type: {@link Order})
      */
     @Override
     @Transactional
@@ -103,9 +103,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * Method that gets blueprint for order for given shopping cart (of type: Order)
+     * Method that gets blueprint for order for given shopping cart (of type: {@link ShoppingCart})
      *
-     * @param shoppingCart  shopping cart, data source for blueprint (of type: ShoppingCart)
+     * @param shoppingCart  shopping cart, data source for blueprint (of type: {@link ShoppingCart})
      * @return partially filled order object (of type: Order)
      */
     @Override
@@ -120,8 +120,8 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method that translates shopping cart positions to order positions and sets them for order object
      *
-     * @param blueprint     order blueprint to fill (of type: Order)
-     * @param shoppingCart  shopping cart, data source (of type: ShoppingCart)
+     * @param blueprint     order blueprint to fill (of type: {@link Order})
+     * @param shoppingCart  shopping cart, data source (of type: {@link ShoppingCart})
      */
     @Override
     public void setOrderPositions(Order blueprint, ShoppingCart shoppingCart) {
@@ -141,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method that validates order blueprint
      *
-     * @param blueprint     order blueprint to validate (of type: Order)
+     * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failure (od type: boolean)
      */
     @Override
@@ -152,9 +152,9 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Method that sets order postponement time based on given date
-     * Validates postponement time - must be in range <7, 30>
+     * Validates postponement time - must be in range [7, 30]
      *
-     * @param blueprint     order blueprint (of type: Order)
+     * @param blueprint     order blueprint (of type: {@link Order})
      * @param date          postponement date (of type: Date)
      * @return validation success or failure (of type: boolean)
      */
@@ -178,7 +178,7 @@ public class OrderServiceImpl implements OrderService {
      * Method that sets postponement time for order blueprint
      * Postponement value must be greater than 0
      *
-     * @param blueprint     order blueprint (of type: Order)
+     * @param blueprint     order blueprint (of type: {@link Order})
      * @param value         postponement time value (of type: Integer)
      * @return success or failure to set postponement (of type: boolean)
      */
@@ -193,7 +193,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Getter for errors
      *
-     * @return errors (of type: List<String>)
+     * @return errors (of type: {@link List})
      */
     @Override
     public List<String> getErrors() {
@@ -202,16 +202,16 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Method that prepares order
-     * Filled data:     order positions (of type: List<OrderPosition>)
+     * Filled data:     order positions (of type: {@link List})
      *                  invoice (of type: Boolean)
-     *                  invoice address, null if invoice is false (of type: Address)
+     *                  invoice address, null if invoice is false (of type: {@link Address})
      *                  personal collection (of type: Boolean)
-     *                  delivery address, null if personal collection is true (of type: Address)
+     *                  delivery address, null if personal collection is true (of type: {@link Address})
      *                  delivery cost, 0.0 if personal collection is true (of type: Double)
      *                  postponement time (of type: Integer)
      *                  complaining, set to false (of type: Boolean)
      *
-     * @param blueprint
+     * @param blueprint order blueprint (not fully filled object)
      */
     @Override
     public void prepareOrder(Order blueprint) {
@@ -245,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
      * Getter for prepared order
      * Null if not set
      *
-     * @return prepared order (of type: Order)
+     * @return prepared order (of type: {@link Order})
      */
     @Override
     public Order getPreparedOrder() {
@@ -255,7 +255,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method that saves order to database
      *
-     * @param order     order to save (of type: Order)
+     * @param order     order to save (of type: {@link Order})
      * @return save success or failuer (of type: Boolean)
      */
     @Override
@@ -280,7 +280,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method that calculates delivery cost for order
      *
-     * @param order     order (of type: Order)
+     * @param order     order (of type: {@link Order})
      * @return delivery cost (of type: Double)
      */
     @Override
@@ -306,7 +306,7 @@ public class OrderServiceImpl implements OrderService {
      * Method that validates order positions
      * Adds error message to errors if invalid
      *
-     * @param blueprint     order blueprint to validate (of type: Order)
+     * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failuer (of type: boolean)
      */
     private boolean validatePositions(Order blueprint) {
@@ -337,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
      * Method that validates shipment address
      * Adds error message to errors if invalid
      *
-     * @param blueprint     order blueprint to validate (of type: Order)
+     * @param blueprint     order blueprint to validate (of type: {@link Order})
      * @return validation success or failure (of type: boolean)
      */
     private boolean validateShipmentAddress(Order blueprint) {
@@ -400,7 +400,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Method that gets order value
      *
-     * @param order     order, data source (of type: Order)
+     * @param order     order, data source (of type: {@link Order})
      * @return order value (of type: double)
      */
     @Override
@@ -418,8 +418,8 @@ public class OrderServiceImpl implements OrderService {
      * Method that sends order confirmation email
      * May throw MessagingException
      *
-     * @param order     placed order (of type: Order)
-     * @throws MessagingException
+     * @param order     placed order (of type: {@link Order})
+     * @throws MessagingException when mail sending fails
      */
     @Override
     public void sendOrderConfirmationEmail(Order order) throws MessagingException {

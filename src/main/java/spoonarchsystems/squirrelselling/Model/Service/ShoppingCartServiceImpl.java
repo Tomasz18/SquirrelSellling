@@ -22,7 +22,7 @@ import java.util.List;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     /**
-     * Data Access Object for ware (of type: WareDAO)
+     * Data Access Object for ware (of type: {@link WareDAO})
      */
     @Autowired
     private WareDAO wareDAO;
@@ -35,7 +35,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     /**
      * Getter for existing shopping cart
      *
-     * @return shopping cart (of type: ShoppingCart)
+     * @return shopping cart (of type: {@link ShoppingCart})
      */
     @Override
     public ShoppingCart getShoppingCart() {
@@ -46,7 +46,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * Method that updates quantities of shopping cart positions
      * Validates if new position quantities are correct
      *
-     * @param cart  shopping cart to update (of type: ShoppingCart)
+     * @param cart  shopping cart to update (of type: {@link ShoppingCart})
      * @return update success or failure (of type: boolean)
      */
     @Override
