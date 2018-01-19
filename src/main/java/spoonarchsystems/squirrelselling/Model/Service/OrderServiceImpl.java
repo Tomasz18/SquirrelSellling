@@ -12,14 +12,15 @@ import org.springframework.web.context.WebApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import spoonarchsystems.squirrelselling.Model.DAO.OrderDAO;
-import spoonarchsystems.squirrelselling.Model.Entity.Order;
-import spoonarchsystems.squirrelselling.Model.Entity.OrderPosition;
 import spoonarchsystems.squirrelselling.Model.Entity.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**

@@ -1,8 +1,8 @@
 package spoonarchsystems.squirrelselling.Model.DAO;
 
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,7 +11,6 @@ import spoonarchsystems.squirrelselling.Model.Entity.CustomerAccount;
 import spoonarchsystems.squirrelselling.Model.Entity.Order;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Data Access Object provides {@link CustomerAccount} database operations
